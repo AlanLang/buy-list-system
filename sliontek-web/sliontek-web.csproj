@@ -331,6 +331,10 @@
     <Compile Include="Migrations\201806070741400_add-buy-new.Designer.cs">
       <DependentUpon>201806070741400_add-buy-new.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806070801409_add-buy-new1.cs" />
+    <Compile Include="Migrations\201806070801409_add-buy-new1.Designer.cs">
+      <DependentUpon>201806070801409_add-buy-new1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Buy\BuyNew.cs" />
     <Compile Include="Model\Def\DefBuyType.cs" />
@@ -444,6 +448,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806070741400_add-buy-new.resx">
       <DependentUpon>201806070741400_add-buy-new.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806070801409_add-buy-new1.resx">
+      <DependentUpon>201806070801409_add-buy-new1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

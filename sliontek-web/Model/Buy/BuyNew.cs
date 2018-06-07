@@ -31,6 +31,11 @@ namespace sliontek_web.Model.Buy
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public string BuyTime { get; set; }
 
+        /// <summary>
+        /// 0 新增，1审核中，2 被驳货，3已通过，4归档
+        /// </summary>
+        public int BuyState { get; set; }
+
         [MaxLength(90)]
         public string TypeDesc { get; set; }
 
