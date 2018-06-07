@@ -1,5 +1,6 @@
 ﻿using sliontek_web.Migrations;
 using sliontek_web.Model;
+using sliontek_web.Model.Buy;
 using sliontek_web.Model.Def;
 using System;
 using System.Collections.Generic;
@@ -24,12 +25,14 @@ namespace sliontek_web.Repositories
         public DbSet<SysMenuLimit> SysMenuLimit { get; set; }
         public DbSet<SysRoleMenuLimit> SysRoleMenuLimit { get; set; }
         public DbSet<DefBuyType> DefBuyType { get; set; }
+        public DbSet<BuyNew> BuyNew { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<SysMenuNavbar>(); // 忽略建表
             // 取消自动生成表名时变成复数形式
             modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.PluralizingTableNameConvention>();
+            modelBuilder.Entity<BuyNew>().Property(m => m.BuyPrice).HasPrecision(18, 2);
         }
     }
 }

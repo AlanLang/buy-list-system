@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "BuyNew";
+    Layout = "~/Views/Master/_page.cshtml";
+}
+<link href="~/Scripts/selectPage/selectpage.css" rel="stylesheet" />
+<script src="~/Scripts/selectPage/selectpage.min.js"></script>
+
+@HtmlHelp.SearchFormStart()
+@HtmlHelp.SearchInput("查询", "search", "查询购物商品")
+@HtmlHelp.SearchButton("searchbtn", "reset")
+@HtmlHelp.SearchFormEnd()
+@HtmlHelp.Table("购物申请")

@@ -288,6 +288,7 @@
     <Compile Include="AppUtil\WhereDynamic.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ApiController.cs" />
+    <Compile Include="Controllers\BuyController.cs" />
     <Compile Include="Controllers\DefineController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="AppUtil\SlionControllercs.cs" />
@@ -326,7 +327,12 @@
     <Compile Include="Migrations\201806070646125_addbuytype.Designer.cs">
       <DependentUpon>201806070646125_addbuytype.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806070741400_add-buy-new.cs" />
+    <Compile Include="Migrations\201806070741400_add-buy-new.Designer.cs">
+      <DependentUpon>201806070741400_add-buy-new.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Model\Buy\BuyNew.cs" />
     <Compile Include="Model\Def\DefBuyType.cs" />
     <Compile Include="Model\Sys\SysMenu.cs" />
     <Compile Include="Model\Sys\SysMenuLimit.cs" />
@@ -397,6 +403,7 @@
     <Content Include="Views\Home\LogIn.cshtml" />
     <Content Include="Views\Home\ChangUserPass.cshtml" />
     <Content Include="Views\Define\BuyType.cshtml" />
+    <Content Include="Views\Buy\BuyNew.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -434,6 +441,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806070646125_addbuytype.resx">
       <DependentUpon>201806070646125_addbuytype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806070741400_add-buy-new.resx">
+      <DependentUpon>201806070741400_add-buy-new.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
