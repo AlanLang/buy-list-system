@@ -15,6 +15,8 @@ namespace sliontek_web.Model.Buy
 
         [MaxLength(50)]
         public string LogMsg { get; set; }
+        [MaxLength(30)]
+        public string Person { get; set; }
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime Create { get; set; }
     }

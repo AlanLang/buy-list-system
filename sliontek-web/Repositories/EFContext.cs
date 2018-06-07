@@ -26,6 +26,7 @@ namespace sliontek_web.Repositories
         public DbSet<SysRoleMenuLimit> SysRoleMenuLimit { get; set; }
         public DbSet<DefBuyType> DefBuyType { get; set; }
         public DbSet<BuyNew> BuyNew { get; set; }
+        public DbSet<BuyNewChangeLog> BuyNewChangeLog { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
