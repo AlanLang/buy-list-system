@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>访问的页面不存在</title>
+	<style type="text/css">
+		body{
+			background-color: rgb(240, 242, 245);
+
+		}
+		.hint-border{
+			margin-top: 210px;
+			margin-left: 60px;
+			display: flex;
+			-ms-flex-align: center;
+			align-items: center;
+			box-sizing: border-box;
+			justify-content: center;
+		}
+		.hint-msg{
+		    color: rgba(0,0,0,.45);
+		    font-size: 20px;
+		    line-height: 28px;
+		    margin-bottom: 16px;
+		}
+		.err-img{
+			background-image: url(./404.svg);
+			height: 360px;
+			width: 100%;
+			max-width: 430px;
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+			background-size: contain;
+			padding-right: 100px;
+		}
+		.hint-title{
+			color: #434e59;
+			font-size: 72px;
+			font-weight: 600;
+			line-height: 72px;
+			margin-bottom: 24px;
+		}
+		.hint-msg-group{
+			height:200px;
+			float:left;
+			width:400px;
+		}
+		.btn-back-home{
+			color: #fff;
+			background-color: #1890ff;
+			border-color: #1890ff;
+			line-height: 1.5;
+			display: inline-block;
+			font-weight: 400;
+			text-align: center;
+			-ms-touch-action: manipulation;
+			touch-action: manipulation;
+			cursor: pointer;
+			background-image: none;
+			border: 1px solid transparent;
+			white-space: nowrap;
+			padding: 0 15px;
+			font-size: 14px;
+			border-radius: 4px;
+			height: 32px;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			-webkit-transition: all .3s cubic-bezier(.645,.045,.355,1);
+			transition: all .3s cubic-bezier(.645,.045,.355,1);
+			position: relative;
+		}
+		.btn-back-home:hover{
+			color: #fff;
+			background-color: #40a9ff;
+			border-color: #40a9ff;
+			text-decoration: none;
+		}
+	</style>
+    <script>
+        function GoHome() {
+            window.location.href = "/";
+        }
+    </script>
+</head>
+<body>
+	<div class="hint-border">
+		<div class="err-img"></div>
+		<div class="hint-msg-group">
+			<div class="hint-title">
+			 404
+			</div>
+			<div class="hint-msg">
+				抱歉，您访问的页面不存在
+			</div>
+			<div class="div-btn-group">
+				<button class="btn-back-home" onclick="GoHome()" type="button">返回首页</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

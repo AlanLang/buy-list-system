@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "BuyType";
+    Layout = "~/Views/Master/_page.cshtml";
+}
+@HtmlHelp.SearchFormStart()
+@HtmlHelp.SearchInput("查询", "search", "请输入购物类别")
+@HtmlHelp.SearchButton("searchbtn", "reset")
+@HtmlHelp.SearchFormEnd()
+@HtmlHelp.Table("购物类别定义")
+
+@HtmlHelp.LayFormStart("form-role-edit")
+@HtmlHelp.Hidden("ID", "")
+@HtmlHelp.Input("TypeName", "类别名称", "", "required")
+@HtmlHelp.Textarea("TypeDesc", "描述", "", "", "150")
+@HtmlHelp.FormBtn()
+@HtmlHelp.LayFormEnd()
+
+<script>
+layui.use(['sliontable', 'common', 'form'], function () {
+    var table = layui.sliontable;
+    var common = layui.common;
+    var form = layui.form;
+    var formIndex = 0;
+    var where = { field: 'Create', order: 'desc', condition: '' };
+    var cols = [[
+       { field: 'TypeName', title: '类别名称', }
+      , { title: '建立时间', templet: "<div>{{formatDateTime(d.Create)}}</div>" }
+    ]]
+    // 实例化table
+    var mestable = table.render({
+        url: '/Define/PageBuyType' //数据接口
+        , cols: cols
+        , where: where
+    });
+    // 监听内容点击
+    table.tool(function (obj) {
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+        if (layEvent === 'bar-delete') { //删除
+            var index = common.deleteConfirm('是否删除类别【' + data.TypeName + '】', function () {
+                $.getJSON("/Define/DeleteBuyType?id=" + data.ID, function (re) {
+                    if (re.code == 0) {
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        common.msg("成功删除类别【" + data.TypeName + "】");
+                    } else {
+                        common.msgError(re.err);
+                    }
+                })
+            })
+        } 
+    });
+    //监听按钮点击
+    $("#searchbtn").on("click", function () {
+        where.condition = JSON.stringify([{ op: "like", name: "TypeName", value: $("#search").val(), type: "text", field: "and" }]);
+        table.search(where, $(this));
+    });
+    $("#reset").on("click", function () {
+        where.condition = "";
+        table.search(where);
+    });
+    $("#addOne").on("click", function () {
+        $('#form-role-edit').children("form").trigger("reset")
+        formIndex = common.open('购物类别添加', '#form-role-edit')
+    });
+    $("#btnclose").on("click", function () {
+        $(".submitbtn").html("提交");
+        layer.close(formIndex);
+    });
+    form.on('submit(slionform)', function (data) {
+        if ($(".submitbtn").html() == "提交") {
+            $(".submitbtn").html(loadingHtml);//改变提交按钮为loading
+            $.post("/Define/EditBuyType", data.field, function (data, textStatus, jqXHR) {
+                $(".submitbtn").html("提交");
+                if (data.code == 0) {
+                    common.msg(data.msg, function () {
+                        $('#form-role-edit').children("form").trigger("reset")
+                        mestable.reload();
+                        layer.close(formIndex);
+                    })
+                } else {
+                    common.msgError(data.err);
+                }
+            }, "json");
+        }
+        return false;
+    });
+});
+</script>

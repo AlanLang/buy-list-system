@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "SysRoleMenu";
+    Layout = "~/Views/Master/_layer.cshtml";
+}
+<style>
+    #Fatbody tr td input {
+        border: none;
+        height: 35px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .layui-table td {
+        padding: 9px 15px;
+    }
+
+    .layui-table th {
+        text-align: center;
+    }
+   .layui-table tr:nth-child(even) {
+        background-color:white;
+    }
+    span.menu-limit {
+        border: 1px solid #009688;
+        padding: 5px;
+        margin-right: 10px;
+        cursor:pointer;
+    }
+
+    span.select {
+        border: 1px solid #009688;
+        background-color:#009688;
+        color:white;
+        padding: 5px;
+        margin-right: 10px;
+        cursor:pointer;
+    }
+</style>
+<div>
+    <form class="layui-form layer-table" action="">
+        <input type="hidden" name="id" value="@ViewBag.id" />
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+                @*<tr>
+                    <th>菜单</th>
+                    <th>功能</th>
+                </tr>*@
+            </thead>
+            <tbody id="Fatbody">
+                @{
+                                foreach (sliontek_web.Model.SysMenu item in ViewBag.menus)
+                                {
+                        <tr @(item.MenuFa == 0? "style=background-color:#f2f2f2" : "")>
+                            <td>@item.MenuName</td>
+                            <td>
+                                            @{
+                                                            List<sliontek_web.Model.SysMenuLimit> menuLimits = item.SysMenuLimit.ToList();
+                                                            foreach (var limit in menuLimits.OrderBy(m => m.MenuLimitSort))
+                                                            {
+                                                                List<sliontek_web.Model.SysRoleMenuLimit> roleLimts = ViewBag.roleMenuLimit;
+                                                                if (roleLimts != null && roleLimts.Count > 0)
+                                                                {
+                                                                    var thisRoleLimit = roleLimts.Where(m => m.MenuLimitID == limit.MenuLimitID);
+                                                                    if (thisRoleLimit == null || thisRoleLimit.Count() == 0)
+                                                                    {
+                                                <span data-id="@limit.MenuLimitID" class="menu-limit">@limit.MenuLimitName</span>
+                                                    }
+                                            else
+                                            {
+                                                <span data-id="@limit.MenuLimitID" class="menu-limit select">@limit.MenuLimitName</span>
+                                                }
+                                        }
+                                        else
+                                        {
+                                            <span data-id="@limit.MenuLimitID" class="menu-limit">@limit.MenuLimitName</span>
+                                        }
+
+                                    }}
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+<script>
+layui.use(['form', 'common'], function () {
+    var form = layui.form;
+    var commom = layui.common;
+    LayerAuto();
+    $("span.menu-limit").on("click", function () {
+        var $that = $(this);
+        var roleId = @ViewBag.id;
+        var menuLimitID = $that.data("id");
+        if ($that.hasClass("select")) {
+            $.getJSON("/Home/SetSysRoleMenuLimit?roleid="+roleId+"&limitid="+menuLimitID+"&type=0",function(re){
+                if (re.code == 0) {
+                    $that.removeClass("select");
+                }else
+                {
+                    commom.msgErr(re.err);
+                }
+            })
+        } else {
+            $.getJSON("/Home/SetSysRoleMenuLimit?roleid="+roleId+"&limitid="+menuLimitID+"&type=1",function(re){
+                if (re.code == 0) {
+                    $that.addClass("select");
+                }else
+                {
+                    commom.msgErr(re.err);
+                }
+            })
+
+        }
+    })
+});
+</script>
+

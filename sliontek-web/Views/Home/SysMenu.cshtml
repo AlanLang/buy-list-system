@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "SysMenu";
+    Layout = "~/Views/Master/_page.cshtml";
+}
+
+@HtmlHelp.SearchFormStart()
+@HtmlHelp.SearchInput("菜单名称", "search")
+<div class='layui-inline search-item'>
+    <label class="layui-form-label">主菜单</label>
+    <div class="layui-input-block">
+        @Html.DropDownList("SelMenuFa", (SelectList)ViewData["MenuFa"], "--请选择--")
+    </div>
+</div>
+@HtmlHelp.SearchButton("searchbtn", "reset")
+@HtmlHelp.SearchFormEnd()
+@HtmlHelp.Table("菜单管理")
+
+
+@HtmlHelp.LayFormStart("form-role-edit")
+@HtmlHelp.Hidden("MenuID", "")
+@HtmlHelp.Input("MenuName", "菜单名称", "", "required")
+@HtmlHelp.Input("MenuUrl", "菜单地址", "", "")
+<div class='layui-form-item'>
+    <label class="layui-form-label">上级菜单</label>
+    <div class="layui-input-block">
+        @Html.DropDownList("MenuFa", (SelectList)ViewData["MenuFa"], "--请选择--")
+    </div>
+</div>
+@HtmlHelp.Textarea("MenuDesc", "菜单描述", "", "", "150")
+@HtmlHelp.FormBtn()
+@HtmlHelp.LayFormEnd()
+
+<script>
+layui.use(['sliontable', 'common', 'form'], function () {
+    var table = layui.sliontable;
+    var common = layui.common;
+    var form = layui.form;
+    var formIndex = 0;
+    var where = { field: null, order: null, condition: '' };
+    var cols = [[
+       { title: '菜单名称', toolbar: '#bar-menu', }
+      , { field: 'MenuUrl', title: '菜单地址'}
+    ]]
+    // 实例化table
+    var mestable = table.render({
+        url: '/Home/PageSysMenu' //数据接口
+        , cols: cols
+        , page:false
+        , where: where
+    });
+    // 监听内容点击
+    table.tool(function (obj) {
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+        if (layEvent === 'bar-delete') { //删除
+            var index = common.deleteConfirm('是否删除菜单【'+data.MenuName+'】？', function () {
+                $.getJSON("/Home/DeleteSysMenu?id=" + data.MenuID, function (re) {
+                    if (re.code == 0) {
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        common.msg("成功删除菜单【" + data.MenuName + "】");
+                    } else {
+                        common.msgError(re.err);
+                    }
+                })
+            })
+        } else if (layEvent === 'bar-edit') { //编辑
+            $.getJSON("/Home/GetMenu?id=" + data.MenuID, function (re) {
+                $('#form-role-edit').children("form").autofill(re.data);
+                form.render();
+                formIndex = common.open('修改菜单【'+data.MenuName+'】', '#form-role-edit')
+            })
+        } else if (layEvent === 'bar-arrow-up') {
+            var loadIndex = common.loadingMsg("正在移动");
+            $.getJSON("/Home/MenuSort?type=up&id=" + data.MenuID, function (re) {
+                common.close(loadIndex);
+                if (re.code == 0) {
+                    mestable.reload();
+                } else {
+                    common.msgError(re.err);
+                }
+            })
+        } else if (layEvent === 'bar-arrow-down') {
+            var loadIndex = common.loadingMsg("正在移动");
+            $.getJSON("/Home/MenuSort?type=down&id=" + data.MenuID, function (re) {
+                common.close(loadIndex);
+                if (re.code == 0) {
+                    mestable.reload();
+                } else {
+                    common.msgError(re.err);
+                }
+            })
+        } else if (layEvent === 'bar-bar') {
+            common.iframe("菜单【"+data.MenuName+"】功能维护","/Home/SysMenuBars?id="+data.MenuID)
+        }
+    });
+    //监听按钮点击
+    $("#searchbtn").on("click", function () {
+        where.condition = JSON.stringify([{ op: "like", name: "MenuName", value: $("#search").val(), type: "text", field: "and" },
+        { op: "equal", name: "MenuFa", value: $("#SelMenuFa").val(), type: "text", field: "and" }]);
+        table.search(where, $(this));
+    });
+    $("#reset").on("click", function () {
+        where.condition = "";
+        table.search(where);
+    });
+    $("#addOne").on("click", function () {
+        $('#form-role-edit').children("form").trigger("reset")
+        formIndex = common.open('菜单添加', '#form-role-edit')
+    });
+    $("#btnclose").on("click", function () {
+        $(".submitbtn").html("提交");
+        layer.close(formIndex);
+    });
+    form.on('submit(slionform)', function (data) {
+        if ($(".submitbtn").html() == "提交") {
+            $(".submitbtn").html(loadingHtml);//改变提交按钮为loading
+            $.post("/Home/EidtSysMenu", data.field, function (data, textStatus, jqXHR) {
+                $(".submitbtn").html("提交");
+                if (data.code == 0) {
+                    common.msg(data.msg, function () {
+                        $('#form-role-edit').children("form").trigger("reset");
+                        mestable.reload();
+                        layer.close(formIndex);
+                    })
+                } else {
+                    common.msgError(data.err);
+                }
+            }, "json");
+        }
+        return false;
+    });
+});
+</script>
+<script type="text/html" id="bar-menu">
+    {{#  if(d.MenuFa > 0){ }}
+        {{'———— ' + d.MenuName}}
+    {{#  } else { }}
+        {{d.MenuName}}
+    {{#  } }}
+</script>

@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "SysUserRole";
+    Layout = "~/Views/Master/_layer.cshtml";
+}
+<style>
+    span.roles {
+        border: 1px solid #009688;
+        padding: 5px;
+        margin-right: 10px;
+        cursor: pointer;
+        float: left;
+        margin-bottom: 10px;
+    }
+    span.select {
+        border: 1px solid #009688;
+        background-color:#009688;
+        color:white;
+        padding: 5px;
+        margin-right: 10px;
+        cursor:pointer;
+    }
+</style>
+<div style="padding:10px">
+    @{
+        List<sliontek_web.Model.SysUserRole> sysUserRoles = ViewBag.userRoles;
+        foreach (var item in ViewBag.Roles)
+        {
+            if (sysUserRoles.Where(m => m.RoleID == item.RoleID).Count() > 0)
+            {
+                <span data-id="@item.RoleID" class="roles select">@item.RoleName</span>
+            }
+            else
+            {
+                <span data-id="@item.RoleID" class="roles">@item.RoleName</span>
+            }
+        }
+    }
+</div>
+<script>
+    layui.use(['common'], function () {
+        var commom = layui.common;
+        LayerAuto();
+        $("span.roles").on("click", function () {
+            var $that = $(this);
+            var userId = @ViewBag.id;
+            var roleId = $that.data("id");
+            if ($that.hasClass("select")) {
+                $.getJSON("/Home/SetSysUserRole?roleid="+roleId+"&userid="+userId+"&type=0",function(re){
+                    if (re.code == 0) {
+                        $that.removeClass("select");
+                    }else
+                    {
+                        commom.msgErr(re.err);
+                    }
+                })
+            } else {
+                $.getJSON("/Home/SetSysUserRole?roleid="+roleId+"&userid="+userId+"&type=1",function(re){
+                    if (re.code == 0) {
+                        $that.addClass("select");
+                    }else
+                    {
+                        commom.msgErr(re.err);
+                    }
+                })
+
+            }
+        })
+    });
+</script>

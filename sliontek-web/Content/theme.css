@@ -1,0 +1,62 @@
+/*标题栏颜色*/
+div.p-head {
+    background: #1F2530;
+    border-bottom: #1F2530 1px solid;
+}
+/*主菜单颜色*/
+li.layui-nav-item > a {
+    background-color: #2B2E37;
+    color:#666 ;
+}
+/*菜单栏底色*/
+div.p-menu {
+    background: #393d49;
+    color: #C0C5D6;
+}
+/*子菜单选中颜色*/
+.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-this > a:hover {
+    background-color: #4E5465 !important;
+}
+/*子菜单悬浮颜色*/
+.layui-nav-child a:hover {
+    background-color: #4E5465 !important;
+}
+
+/*子菜单背景色*/
+.layui-nav-tree .layui-nav-child a {
+    background-color:#393d49;
+}
+#user a {
+    background:none;
+}
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+ background:none !important;
+}
+/*表格标题颜色*/
+div.table-title {
+        background: #1F2530;
+}
+/*表格文字大小*/
+.layui-table td, .layui-table th {
+    font-size:12px !important;
+}
+/*表格样式*/
+.layui-table-view .layui-table td, .layui-table-view .layui-table th {
+    padding:0px !important;
+}
+/*表格行鼠标悬浮背景色*/
+.layui-table tr:hover td{
+    background-color:#e1eff8;
+}
+
+/*表格偶数行背景色*/
+.layui-table tr:nth-child(even){
+background:#F4F4F4;
+}
+/*提交按钮背景色*/
+.submitbtn {
+    background-color:#177bbb !important;
+    width:64px;
+
+}
+

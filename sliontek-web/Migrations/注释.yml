@@ -1,0 +1,87 @@
+﻿table: 
+  - name: __MigrationHistory
+    note: 
+    column:
+      - name: MigrationId
+        note: 
+      - name: ContextKey
+        note: 
+      - name: Model
+        note: 
+      - name: ProductVersion
+        note: 
+  - name: SysMenu
+    note: 系统菜单
+    column:
+      - name: MenuID
+        note: 系统菜单自增ID
+      - name: MenuName
+        note: 菜单名称
+      - name: MenuDesc
+        note: 菜单描述
+      - name: MenuFa
+        note: 父级菜单
+      - name: MenuSort
+        note: 菜单排序
+      - name: MenuUrl
+        note: 菜单地址
+  - name: SysRole
+    note: 系统角色表
+    column:
+      - name: RoleID
+        note: 系统角色表id
+      - name: RoleCode
+        note: 角色代码
+      - name: RoleName
+        note: 角色名称
+      - name: RoleDesc
+        note: 角色描述
+      - name: RoleModified
+        note: 条目修改时间
+      - name: RoleCreate
+        note: 条目新增时间
+  - name: SysRoleMenu
+    note: 角色菜单表
+    column:
+      - name: RoleMenuID
+        note: 角色菜单表自增id
+      - name: RoleID
+        note: 关联的角色表id
+      - name: MenuID
+        note: 关联的菜单表id
+      - name: Permission
+        note: 角色权限
+      - name: RoleMenuModified
+        note: 条目修改时间
+      - name: RoleMenuCreate
+        note: 条目新增时间
+  - name: SysUser
+    note: 系统用户
+    column:
+      - name: UserID
+        note: 用户表自增ID
+      - name: UserCode
+        note: 用户代码
+      - name: UserName
+        note: 用户名称
+      - name: UserPwd
+        note: 用户密码
+      - name: UserMail
+        note: 用户邮件
+      - name: UserModified
+        note: 条目修改时间
+      - name: UserCreate
+        note: 条目生成时间
+  - name: SysUserRole
+    note: 用户角色关联表
+    column:
+      - name: UserRoleID
+        note: 用户角色关联表自增id
+      - name: UserID
+        note: 关联的用户id
+      - name: RoleID
+        note: 关联的角色id
+      - name: UserRoleModified
+        note: 条目修改时间
+      - name: UserRoleCreate
+        note: 条目新增时间

@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Master/_page.cshtml";
+}
+<style>
+    .Pag {
+        width: 200px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+        margin-right: 20px;
+        float: left;
+        border-bottom: 1px solid rgba(8, 8, 8, 0.12);
+    }
+
+    .panel-heading {
+        font-weight: 500;
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 18px;
+        position: fixed;
+        bottom: 5px;
+        text-align: center;
+    }
+
+    .time {
+        font-weight: 500;
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 70px;
+        text-align: center;
+        line-height: 60px;
+        color: #918C8C;
+        height: 60px;
+    }
+
+    .bigtext {
+        font-weight: 500;
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 70px;
+        text-align: center;
+        line-height: 88px;
+        color: #918C8C;
+        height: 88px;
+    }
+
+    .date {
+        margin-top: 4px;
+        text-align: center;
+        font-size: 15px;
+        color: #918C8C;
+    }
+</style>
+<div class="p-table" style="background:none">
+    <div style="padding:10px;">
+        <div class="Pag">
+            <div class="time">14:57</div>
+            <div class="date">2017年9月14日</div>
+        </div>
+        <div class="Pag bigtext" style="display:none">
+            早班
+        </div>
+        <div class="Pag panel-heading">
+            Copyright ©2017-2018 Sliontek
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        startTime(0);
+        sizeconfig();
+        $(window).resize(function () {
+            sizeconfig();
+        });
+    })
+    function startTime() {
+        var today = new Date()
+        var h = today.getHours()
+        var m = today.getMinutes()
+        var s = today.getSeconds()
+
+        var year = today.getFullYear(); //获取完整的年份(4位,1970-????)
+        var month = today.getMonth() + 1; //获取当前月份(0-11,0代表1月)
+        var date = today.getDate(); //获取当前日(1-31)
+        var week = GetWeek(today.getDay());
+        // add a zero in front of numbers<10
+        m = checkTime(m)
+        s = checkTime(s)
+        if (s % 2 == 0) {
+            $(".time").text(h + ":" + m);
+        } else {
+            $(".time").text(h + " " + m);
+        }
+        $(".date").text(year + "年" + month + "月" + date + "日" + " 星期" + week);
+        t = setTimeout('startTime()', 500)
+    }
+    function checkTime(i) {
+        if (i < 10) { i = "0" + i }
+        return i
+    }
+    function GetWeek(day) {
+        switch (day) {
+            case 0: return "天";
+            case 1: return "一";
+            case 2: return "二";
+            case 3: return "三";
+            case 4: return "四";
+            case 5: return "五";
+            case 6: return "六";
+            default: return "";
+        }
+    }
+    function sizeconfig() {
+        var width = $(window).width() - 280;
+        $(".panel-heading").css("width", width);
+
+    }
+</script>

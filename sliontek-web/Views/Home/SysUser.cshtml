@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "SysUser";
+    Layout = "~/Views/Master/_page.cshtml";
+}
+@HtmlHelp.SearchFormStart()
+@HtmlHelp.SearchInput("用户代码", "sh-user-code", "请输入用户代码")
+@HtmlHelp.SearchInput("用户名称", "sh-user-name", "请输入用户名称")
+@HtmlHelp.SearchButton("searchbtn", "reset")
+@HtmlHelp.SearchFormEnd()
+@HtmlHelp.Table("系统用户")
+
+@HtmlHelp.LayFormStart("form-user-edit")
+@HtmlHelp.Hidden("UserID", "")
+@HtmlHelp.Input("UserCode", "用户代码", "", "required")
+@HtmlHelp.Input("UserName", "用户名称", "", "required")
+<span id="spn-pwd-group">
+    @HtmlHelp.Input("UserPwd", "用户密码", "", "")
+    @HtmlHelp.Input("UserPwdConform", "确认密码", "", "")
+</span>
+@HtmlHelp.Input("UserMail", "用户邮箱", "", "")
+@HtmlHelp.FormBtn()
+@HtmlHelp.LayFormEnd()
+
+@HtmlHelp.LayFormStart("form-user-changepwd")
+@HtmlHelp.Input("npwd", "新密码", "", "required")
+@HtmlHelp.Input("npwd1", "密码确认", "", "required")
+@HtmlHelp.FormBtn("changepwd")
+@HtmlHelp.LayFormEnd()
+
+<script>
+    layui.use(['sliontable', 'common', 'form'], function () {
+        var table = layui.sliontable;
+        var common = layui.common;
+        var form = layui.form;
+        var formIndex = 0;
+        var where = { field: 'UserCode', order: 'desc', condition: '' };
+        var cols = [[
+            { field: 'UserCode', title: '用户代码', sort: true }
+          , { field: 'UserName', title: '用户名称', sort: true }
+          , { field: 'UserMail', title: '用户邮箱', sort: true }
+          , { title: '用户建立时间', templet: "<div>{{formatDateTime(d.UserCreate)}}</div>" }
+        ]]
+        // 实例化table
+        var mestable = table.render({
+            url: '/Home/PageSysUser' //数据接口
+            , cols: cols
+            , where: where
+        });
+        // 监听内容点击
+        table.tool(function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if (layEvent === 'bar-delete') { //删除
+                var index = common.deleteConfirm('是否删除用户【' + data.UserName + '】', function () {
+                    $.getJSON("/Home/DeleteSysUser?id=" + data.UserID, function (re) {
+                        if (re.code == 0) {
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            common.msg("成功删除用户【" + data.UserName + "】");
+                        } else {
+                            common.msgError(re.err);
+                        }
+                    })
+                })
+            } else if (layEvent === 'bar-edit') { //编辑
+                $.getJSON("/Home/GetSysUser?id=" + data.UserID, function (re) {
+                    $('#form-user-edit').children("form").autofill(re.data);
+                    $("#spn-pwd-group").hide();
+                    formIndex = common.open('修改用户【' + data.UserName + '】', '#form-user-edit')
+                })
+            } else if (layEvent === 'bar-role') {
+                common.iframe('用户【' + data.UserName + '】分配角色', '/Home/SysUserRole?id=' + data.UserID);
+            } else if (layEvent === 'bar-changepwd') {
+                $('#form-user-changepwd').children("form").trigger("reset");
+                changeIndex = common.open('用户【' + data.UserName + '】修改密码', '#form-user-changepwd');
+                var barData = data;
+                form.on('submit(changepwd)', function (data) {
+                    if ($(".submitbtn").html() == "提交") {
+                        var npwd = $("#npwd").val();
+                        var npwd1 = $("#npwd1").val();
+                        if (npwd != npwd1) {
+                            common.msgError("两次输入的密码不一致!");
+                            return false;
+                        }
+                        if (npwd.length < 6) {
+                            common.msgError("密码长度不可小于6位!");
+                            return false;
+                        }
+                        $(".submitbtn").html(loadingHtml);//改变提交按钮为loading
+                        $.getJSON("/Home/ChangePwd?id=" + barData.UserID + "&npwd=" + npwd, function (re) {
+                            if (re.code == 0) {
+                                common.msg("密码修改成功", function () {
+                                    $('#form-user-changepwd').children("form").trigger("reset");
+                                    $(".submitbtn").html("提交");
+                                    layer.close(changeIndex);
+                                });
+                            } else {
+                                common.msgError(re.err);
+                            }
+                        });
+                    }
+                    return false;
+                });
+            }
+        });
+        //监听按钮点击
+        $("#searchbtn").on("click", function () {
+            where.condition = JSON.stringify([{ op: "like", name: "UserCode", value: $("#sh-user-code").val(), type: "text", field: "and" },
+            { op: "like", name: "UserName", value: $("#sh-user-name").val(), type: "text", field: "and" }]);
+            table.search(where, $(this));
+        });
+        $("#reset").on("click", function () {
+            where.condition = "";
+            table.search(where);
+        });
+        $("#addOne").on("click", function () {
+            $("#spn-pwd-group").show();
+            $('#form-user-edit').children("form").trigger("reset")
+            formIndex = common.open('用户添加', '#form-user-edit')
+        });
+        $("#btnclose").on("click", function () {
+            $(".submitbtn").html("提交");
+            layer.close(formIndex);
+        });
+
+        form.on('submit(slionform)', function (data) {
+            if ($(".submitbtn").html() == "提交") {
+                $(".submitbtn").html(loadingHtml);//改变提交按钮为loading
+                if ($("#UserID").val() == 0) {
+                    if ($("#UserPwd").val() == "") {
+                        common.msgError("请输入用户密码!");
+                        $(".submitbtn").html("提交");
+                        return false;
+                    }
+                    if ($("#UserPwd").val() != $("#UserPwdConform").val()) {
+                        common.msgError("两次输入的密码不一致!");
+                        $(".submitbtn").html("提交");
+                        return false;
+                    }
+                    if ($("#UserPwd").val().length < 6) {
+                        common.msgError("密码长度不可小于6位!");
+                        $(".submitbtn").html("提交");
+                        return false;
+                    }
+                }
+                if ($("#UserMail").val() != "") {
+                    if (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test($("#UserMail").val()) == false) {
+                        common.msgError("邮箱格式不正确!");
+                        $(".submitbtn").html("提交");
+                        return false;
+                    }
+                }
+            $.post("/Home/EditSysUser", data.field, function (data, textStatus, jqXHR) {
+                $(".submitbtn").html("提交");
+                if (data.code == 0) {
+                    common.msg(data.msg, function () {
+                        $('#form-user-edit').children("form").trigger("reset")
+                        mestable.reload();
+                        layer.close(formIndex);
+                    })
+                } else {
+                    common.msgError(data.err);
+                }
+            }, "json");
+        }
+        return false;
+    });
+});
+</script>
+<script type="text/html" id="bar-role">
+    <i class="fa fa-user-plus" aria-hidden="true" title="角色" lay-event="bar-role" style="font-size: 20px; color: #177bbb;padding-top:3px;"></i>
+</script>
+<script type="text/html" id="bar-changepwd">
+    <i class="fa fa-key" aria-hidden="true" title="修改密码" lay-event="bar-changepwd" style="font-size: 20px; color: #177bbb;padding-top:3px;"></i>
+</script>

@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "SysMenuBars";
+    Layout = "~/Views/Master/_layer.cshtml";
+}
+<style>
+    #Fatbody tr td input {
+        border: none;
+        height: 35px;
+        text-align: center;
+        width: 100%;
+    }
+    .layui-table td {
+        padding: 0px;
+    }
+
+    .layui-table th {
+        text-align: center;
+    }
+    .layui-table tr:nth-child(even) {
+        background: white;
+}
+</style>
+<div>
+    <form class="layui-form layer-table" action="">
+        <input type="hidden" name="id" value="@ViewBag.id" />
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col width="100">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>功能代码</th>
+                    <th>功能名称</th>
+                    <th>排序</th>
+                    <th>删除</th>
+                </tr>
+            </thead>
+            <tbody id="Fatbody">
+                @{
+                    foreach (var item in ViewBag.model)
+                    {
+                        <tr>
+                            <td><input autocomplete="off" name="MenuLimitCode" value="@item.MenuLimitCode" /></td>
+                            <td><input autocomplete="off" name="MenuLimitName" value="@item.MenuLimitName" /></td>
+                            <td><input autocomplete="off" name="MenuLimitSort" value="@item.MenuLimitSort" /></td>
+                            <td style="text-align:center"><i title="删除" class="fa fa-trash-o fa-lg deleteicon"></i></td>
+                        </tr>
+                    }
+                    if (ViewBag.model.Count == 0)
+                    {
+                        <tr>
+                            <td><input autocomplete="off" name="MenuLimitCode" /></td>
+                            <td><input autocomplete="off" name="MenuLimitName" /></td>
+                            <td><input autocomplete="off" name="MenuLimitSort" /></td>
+                            <td style="text-align:center"><i title="删除" class="fa fa-trash-o fa-lg deleteicon"></i></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div style="padding-left: 750px;margin-top: 20px;margin-bottom:10px">
+            <button class='layui-btn' type="button" id="btn-add-one">新增</button>
+            <button class='layui-btn' type="button" lay-submit lay-filter='slionform'>提交</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    var commom;
+    layui.use(['form', 'common'], function () {
+        var form = layui.form;
+        commom = layui.common;
+        //监听提交
+        form.on('submit(slionform)', function (data) {
+            var formdata = $(".layui-form").serialize();//serialize()方法通过序列化表单值，创建 URL 编码文本字符串。
+            //保存
+            $.post("/Home/SysMenuBarsEdit", formdata, function (data, textStatus, jqXHR) {
+                if (data.code == 0) {
+                    commom.msg(data.msg, function () {
+                        LayerClose();
+                    });
+                } else {
+                    commom.msgError(data.err);
+                }
+            }, "json");
+            return false;
+        });
+
+    });
+    //主函数
+    $(function () {
+        $("#btn-add-one").on("click", function () {
+            $("#Fatbody").append(AppendOne("", ""));
+            LayerAuto();
+        });
+
+        $("#Fatbody").on("click", ".deleteicon", function () {
+            var pa = $(this).parents("tr");
+            $(pa).remove();
+        })
+        LayerAuto();
+    });
+    function AppendOne(code, name) {
+    var v = '<tr>';
+    v += '<td><input autocomplete="off" name="MenuLimitCode" lay-verify="required" value="' + code + '" /></td>'
+    v += '<td><input autocomplete="off" name="MenuLimitName" lay-verify="required" value="' + name + '" /></td>'
+    v += '<td><input autocomplete="off" name="MenuLimitSort" lay-verify="required" value="' + name + '" /></td>'
+        v += '<td style="text-align:center"><i title="删除" class="fa fa-trash-o fa-lg deleteicon"></i></td>'
+        v += '</tr>'
+        return v;
+    }
+</script>

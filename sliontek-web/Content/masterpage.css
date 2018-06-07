@@ -1,0 +1,320 @@
+﻿body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-size: 12px;
+    color: #666;
+    font-family: Verdana, Microsoft YaHei, Simsun;
+    background: #ecedf2;
+    line-height: 24px;
+    overflow-y:hidden;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+body, html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+}
+
+em {
+    font-style: normal;
+}
+
+input, button, select, textarea {
+    outline: none;
+}
+
+textarea {
+    resize: none;
+}
+/*禁用了文本的拖拉，尤其在谷歌下*/
+p {
+    text-align: justify;
+    text-justify: distribute;
+}
+/*为了使文本段落左右两边对齐*/
+a {
+    color: #666;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #f60;
+        text-decoration: none;
+    }
+
+body, th, td, .p1, .p2 {
+    font-family: arial;
+}
+/*以上为css样式的初始化*/
+
+/*下面是网页头部内容样式*/
+div.p-head {
+    display: block;
+    zoom: 1;
+    height: 50px;
+    background: rgba(23, 123, 187, 1);
+    border-bottom: rgba(23, 123, 187, 1) 1px solid;
+    padding-right: 15px;
+    color: #fff;
+}
+
+    div.p-head .head-logo {
+        float: left;
+        font-size: 18px;
+        height: auto;
+        line-height: 50px;
+        text-align: center;
+        cursor: pointer;
+            width: 200px;
+    display: block;
+    }
+        div.p-head .head-logo:hover {
+            color: #1AA094;
+        }
+
+    div.p-head .head-btn {
+        float: right;
+        height: 48px;
+        line-height: 48px;
+        font-size: 16px;
+        font-family: "Microsoft YaHei", SimSun, Arial, Sans-Serif;
+        text-align: center;
+        cursor: pointer;
+        padding: 0px 7px;
+    }
+
+        div.p-head .head-btn:hover {
+            background-color: #394150;
+            border-bottom: solid 1px #394150;
+        }
+
+
+/*下面是网页菜单栏内容样式*/
+div.p-menu {
+    width: 200px;
+    background: rgba(225, 230, 239, 1);
+    color: #C0C5D6;
+    overflow: auto;
+    overflow-x: hidden;
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+
+li.layui-nav-item > a {
+    background-color: rgba(225, 230, 239, 1);
+    color:#666 ;
+}
+
+dl.layui-nav-child a {
+    cursor: pointer !important;
+    color: #c2c2c2 !important;
+}
+
+
+.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-this > a:hover {
+    background-color: rgba(23, 123, 187, 1) !important;
+    color: white !important;
+}
+
+.layui-nav-item {
+}
+
+.layui-nav-child dd.layui-this a {
+    background-color: rgba(23, 123, 187, 1) !important;
+    color: white !important;
+}
+.layui-nav-tree .layui-nav-bar {
+    background-color: #177bbb !important;
+}
+
+#mCSB_1_scrollbar_vertical {
+    z-index: 9999999;
+}
+
+
+/*下面是body内容样式*/
+
+.p-body {
+    margin-left: 200px;
+}
+
+div.layui-tab {
+    margin-top: 0px;
+}
+
+div.layui-tab-content {
+    overflow: auto;
+}
+
+div.layui-tab-item {
+    height: 100%;
+}
+
+div.layui-tab-content {
+    z-index: 0;
+    position: fixed;
+    bottom: 0px;
+    top: 81px;
+    right: 0px;
+    left: 200px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 3px;
+    background-color: #ecedf2;
+}
+
+.layui-tab-title .layui-this {
+    color: #000;
+    background-color: #ecedf2;
+}
+
+ul.layui-tab-title {
+    z-index: 1;
+    background-color: white;
+    border: none;
+}
+
+div.layui-tab-item iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+div.layui-tab cite {
+    font-style: inherit;
+    -moz-user-select: none; /*火狐*/
+    -webkit-user-select: none; /*webkit浏览器*/
+    -ms-user-select: none; /*IE10*/
+    -khtml-user-select: none; /*早期浏览器*/
+    user-select: none;
+}
+/*查询*/
+.search-div {
+    background: white;
+    margin: 10px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+.search-item {
+    padding-bottom:10px;
+}
+    .search-item .layui-btn {
+        background-color: #177bbb;
+     }
+        .search-item .layui-btn-primary {
+            border: 1px solid #C9C9C9;
+            background-color: #fff;
+     }
+
+/*下面是表格*/
+div.p-table {
+    margin:10px;
+    background: white;
+}
+div.table-title {
+    color:white;
+    background: #177bbb;
+    height: 35px;
+    line-height: 35px;
+    font-size: 20px;
+    text-indent: 15px;
+}
+    div.table-title i {
+    cursor: pointer;
+    }
+table.layui-table {
+    margin:0px;
+}
+.layui-icon {
+    cursor:pointer;
+}
+.wth200px {
+    width:200px !important;
+}
+.wth150px {
+    width:150px !important;
+}
+.formdiv {
+    background-color:white;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+#iRefresh {
+    text-indent: initial;
+    float: right;
+    margin-top: 7px;
+    margin-right: 20px;
+}
+.deleteicon {
+    color:red;
+    cursor:pointer;
+}
+
+.editicon {
+    color:#0a6158;
+    cursor:pointer;
+}
+.fa {
+    cursor:pointer;
+}
+/*****table******/
+.layui-table, .layui-table-view {
+    margin:0px !important;
+}
+.DragTable table {
+    width:100%;
+    background-color: #fff;
+    color: #666;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e6e6e6;
+}
+.DragTable table th,.DragTable table td {
+    position: relative;
+    padding: 9px 15px;
+    min-height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+        border-width: 1px;
+    border-style: solid;
+    border-color: #e6e6e6;
+}
+.DragTable table th {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e6e6e6;
+}
+.DragTable thead tr {
+background-color: #f2f2f2;
+}
+.layui-layer-page .layui-layer-content {
+position: relative;
+overflow: visible !important;
+}
+.sliontek-from {
+    background-color:white;
+    padding:5px;
+    display:none
+}

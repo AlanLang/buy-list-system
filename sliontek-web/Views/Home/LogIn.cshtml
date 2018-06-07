@@ -1,0 +1,115 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>系统登陆</title>
+    <link href="~/Content/login.css" rel='stylesheet' type='text/css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Simple Login Form,Login Forms,Sign up Forms,Registration Forms,News latter Forms,Elements" . />
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        var b_version = navigator.appVersion
+        var version = parseFloat(b_version)
+        if (version == "4") {
+            alert("当前浏览器版本过低,无法使用本系统");
+            window.close();
+        }
+        if (window.top != window.self) {
+            alert("登录已过期，请重新登入!");
+            var tagert_URL = "/Home/Login";
+            top.location.href = tagert_URL;
+        }
+        $(function () {
+            $("html").bind('keypress', function (event) {
+                if (event.keyCode == "13") {
+                    $("#login-system").click();
+                }
+            });
+            $("#username").on("click", function () {
+                $(".li-username").removeAttr("style");
+            })
+            $("#userpwd").on("click", function () {
+                $(".li-password").removeAttr("style");
+            })
+            $("#login-system").on("click", function () {
+                $("#username").val($("#alan1").val());
+                $("#userpwd").val($("#alan2").val());
+                if ($("#username").val() == "") {
+                    $(".li-username").attr("style", "border-color: red");
+                    return false;
+                }
+                if ($("#userpwd").val() == "") {
+                    $(".li-password").attr("style", "border-color: red");
+                    return false;
+                }
+                var $that = $(this);
+                $that.val("正在登陆");
+                if (version == "4") {
+                    alert("当前浏览器版本过低,无法使用本系统");
+                    window.close();
+                    return false;
+                }
+                var index = window.setInterval(function () {
+                    var loginText = $that.val();
+                    if (loginText.length > 10) {
+                        alert("登陆超时，无法访问到数据库");
+                        window.clearInterval(index);
+                        $that.val("登录");
+                    } else {
+                        $that.val(loginText+".");
+                    }
+                }, 1000);
+                var User = $("#loginForm").serialize();
+
+                $.getJSON("/Home/LoginUser", User, function (re) {
+                    if (re.code == 0) {
+                        location.href = "/";
+                    } else {
+                        window.clearInterval(index);
+                        $that.val("登录");
+                        alert(re.err);
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <h1>欢迎使用后台管理系统</h1>
+    <div class="login">
+        <div class="ribbon-wrapper h2 ribbon-red">
+            <div class="ribbon-front">
+                <h2>用户登陆</h2>
+            </div>
+            <div class="ribbon-edge-topleft2"></div>
+            <div class="ribbon-edge-bottomleft"></div>
+        </div>
+        <form id="loginForm">
+            <ul>
+                <li class="li-username">
+                    <input id="username" name="username" type="text" style="display:none" />
+                    <input id="alan1" type="text" class="text" placeholder="用户名"><a href="#" tabindex="-1" contenteditable="false" class="icon user"></a>
+                </li>
+                <li class="li-password">
+                    <input type="text" id="userpwd" name="userpwd" style="display:none" />
+                    <input type="password" name="password1" style="display:none" />
+                    <input id="alan2" oninput="if(this.value==''){this.type='text'}else(this.type='password')" type="text" placeholder="密码"><a tabindex="-2" contenteditable="false" href="#" class="icon lock"></a>
+                </li>
+            </ul>
+        </form>
+        <div class="submit">
+            <input type="submit" id="login-system" value="登陆">
+        </div>
+    </div>
+    <!--start-copyright-->
+    <div class="copy-right">
+        <p>Copyright &copy; 2018 <a href="http://www.sliontek.com">上海思岭信息科技有限公司</a></p>
+    </div>
+    <!--//end-copyright-->
+</body>
+
+</html>

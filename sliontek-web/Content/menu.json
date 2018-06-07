@@ -1,0 +1,202 @@
+﻿[
+  {
+    "pmid": 2,
+    "title": "系统管理",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 1,
+        "title": "菜单管理",
+        "icon": "",
+        "href": "/Home/SysMenu"
+      },
+      {
+        "piid": 3,
+        "title": "角色管理",
+        "icon": "",
+        "href": "/Home/SysRole"
+      },
+      {
+        "piid": 2,
+        "title": "用户管理",
+        "icon": "",
+        "href": "/Home/SysUser"
+      }
+    ]
+  },
+  {
+    "pmid": 13,
+    "title": "基础数据",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 18,
+        "title": "质量代码",
+        "icon": "",
+        "href": "/Basic/Quacode"
+      },
+      {
+        "piid": 20,
+        "title": "物料定义",
+        "icon": "",
+        "href": "/Basic/Materials"
+      },
+      {
+        "piid": 21,
+        "title": "物料清单",
+        "icon": "",
+        "href": "/Basic/Matbom"
+      },
+      {
+        "piid": 31,
+        "title": "扫料方式",
+        "icon": "",
+        "href": "/Basic/MatScanType"
+      }
+    ]
+  },
+  {
+    "pmid": 12,
+    "title": "工厂建模",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 25,
+        "title": "工厂管理",
+        "icon": "",
+        "href": "/Factory/Werks"
+      },
+      {
+        "piid": 13,
+        "title": "工厂日历",
+        "icon": "",
+        "href": "/Factory/FaCalendar"
+      },
+      {
+        "piid": 8,
+        "title": "部门管理",
+        "icon": "",
+        "href": "/factory/department"
+      },
+      {
+        "piid": 9,
+        "title": "人员管理",
+        "icon": "",
+        "href": "/factory/personnel"
+      },
+      {
+        "piid": 17,
+        "title": "产品管理",
+        "icon": "",
+        "href": "/factory/product"
+      },
+      {
+        "piid": 10,
+        "title": "产线管理",
+        "icon": "",
+        "href": "/factory/producline"
+      }
+    ]
+  },
+  {
+    "pmid": 16,
+    "title": "计划排产",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 24,
+        "title": "生产计划",
+        "icon": "",
+        "href": "/Plan/MesPlan"
+      }
+    ]
+  },
+  {
+    "pmid": 18,
+    "title": "生产追溯",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 26,
+        "title": "生产查询",
+        "icon": "",
+        "href": "/product/selproduct"
+      },
+      {
+        "piid": 28,
+        "title": "考勤记录",
+        "icon": "",
+        "href": "/product/PersonRecord"
+      },
+      {
+        "piid": 29,
+        "title": "质量检测",
+        "icon": "",
+        "href": "/product/qmrecord"
+      },
+      {
+        "piid": 30,
+        "title": "零件查询",
+        "icon": "",
+        "href": "/product/SelItem"
+      }
+    ]
+  },
+  {
+    "pmid": 19,
+    "title": "统计报表",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 27,
+        "title": "产量统计",
+        "icon": "",
+        "href": "/Product/ProductCount"
+      }
+    ]
+  },
+  {
+    "pmid": 20,
+    "title": "质量管理",
+    "icon": "",
+    "spread": false,
+    "children": [
+      {
+        "piid": 101,
+        "title": "质量检测规范",
+        "icon": "",
+        "href": "/QATest/Specifications"
+      },
+      {
+        "piid": 102,
+        "title": "检测计划",
+        "icon": "",
+        "href": "/QATest/Schedules"
+      },
+      {
+        "piid": 103,
+        "title": "质检日志",
+        "icon": "",
+        "href": "/QATest/PlineTestLog"
+      },
+      {
+        "piid": 104,
+        "title": "不合格品处置",
+        "icon": "",
+        "href": "/QATest/DealWithNG"
+      },
+      {
+        "piid": 105,
+        "title": "供应商来料检验",
+        "icon": "",
+        "href": "/QATest/IcomingMaterialQAResult"
+      }
+    ]
+  }
+]

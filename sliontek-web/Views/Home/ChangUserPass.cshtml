@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "ChangUserPass";
+    Layout = "~/Views/Master/_layer.cshtml";
+}
+@HtmlHelp.FormStart()
+@HtmlHelp.Password("oldpwd", "原始密码", "", "required")
+@HtmlHelp.Password("npwd", "新密码", "", "required")
+@HtmlHelp.Password("npwd1", "密码确认", "", "required")
+@HtmlHelp.FormBtn()
+@HtmlHelp.LayFormEnd()
+
+
+<script>
+layui.use([ 'common', 'form'], function () {
+    var common = layui.common;
+    var form = layui.form;
+    LayerAuto();
+    form.on('submit(slionform)', function (data) {
+        if ($("#npwd").val() !== $("#npwd1").val()) {
+            common.msgError("两次输入的密码不一致!");
+            return false;
+        }
+        if ($(".submitbtn").html() == "提交") {
+            $(".submitbtn").html(loadingHtml);//改变提交按钮为loading
+            $.post("/Home/ChangThisPwd", data.field, function (data, textStatus, jqXHR) {
+                $(".submitbtn").html("提交");
+                if (data.code == 0) {
+                    common.msg(data.msg, function () {
+                            parent.location.href = "/Home/Logout";
+                    })
+                } else {
+                    common.msgError(data.err);
+                }
+            }, "json");
+        }
+        return false;
+    });
+});
+</script>
