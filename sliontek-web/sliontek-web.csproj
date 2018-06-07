@@ -335,8 +335,14 @@
     <Compile Include="Migrations\201806070801409_add-buy-new1.Designer.cs">
       <DependentUpon>201806070801409_add-buy-new1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806070901344_add-buy-new-log.cs" />
+    <Compile Include="Migrations\201806070901344_add-buy-new-log.Designer.cs">
+      <DependentUpon>201806070901344_add-buy-new-log.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Buy\BuyNew.cs" />
+    <Compile Include="Model\Buy\BuyNewChangeLog.cs" />
+    <Compile Include="Model\Def\DefBuyLevel.cs" />
     <Compile Include="Model\Def\DefBuyType.cs" />
     <Compile Include="Model\Sys\SysMenu.cs" />
     <Compile Include="Model\Sys\SysMenuLimit.cs" />
@@ -451,6 +457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806070801409_add-buy-new1.resx">
       <DependentUpon>201806070801409_add-buy-new1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806070901344_add-buy-new-log.resx">
+      <DependentUpon>201806070901344_add-buy-new-log.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -9,6 +9,9 @@
         width:443px;
         display:inline-block;
     }
+    .layui-form-select {
+        width:332px;
+    }
 </style>
 <script src="~/Scripts/selectPage/selectpage.min.js"></script>
 
@@ -23,15 +26,18 @@
 @HtmlHelp.Hidden("ID", "")
 <div>
     <div class="input-inline">
-        @HtmlHelp.Input("TypeName", "物品名称", "", "required")
+        @HtmlHelp.Input("BuyName", "物品名称", "", "required")
     </div>
     <div class="input-inline">
-        @HtmlHelp.Input("TypeName", "物品价格", "", "required")
+        @HtmlHelp.Input("BuyPrice", "物品价格", "", "required")
     </div>
 </div>
 <div>
     <div class="input-inline">
-        @HtmlHelp.Input("TypeName", "所属类别", "", "required")
+        <label class="layui-form-label">所属类别</label>
+        <div class="layui-input-inline">
+            @Html.DropDownList("TypeName", (SelectList)ViewData["buyTypes"], "请选择")
+        </div>
     </div>
     <div class="input-inline">
         @HtmlHelp.Input("TypeName", "购买地址", "", "required")
@@ -39,10 +45,13 @@
 </div>
 <div>
     <div class="input-inline">
-        @HtmlHelp.Input("TypeName", "重要程度", "", "required")
+        <label class="layui-form-label">重要程度</label>
+        <div class="layui-input-inline">
+            @Html.DropDownList("BuyLevel", (SelectList)ViewData["buyLevels"], "请选择")
+        </div>
     </div>
     <div class="input-inline">
-        @HtmlHelp.Input("TypeName", "购买时间", "", "required")
+        @HtmlHelp.Input("BuyTime", "购买时间", "", "required")
     </div>
 </div>
 @HtmlHelp.Input("TypeName", "审批人", "", "required")
@@ -51,10 +60,12 @@
 @HtmlHelp.LayFormEnd()
 
 <script>
-layui.use(['sliontable', 'common', 'form'], function () {
+    layui.use(['sliontable', 'common', 'form', 'laydate'], function () {
+    let laydate = layui.laydate;
     var table = layui.sliontable;
     var common = layui.common;
     var form = layui.form;
+    laydate.render({ elem: '#BuyTime', type: 'date', format: 'yyyy-MM-dd', min: 0 });
     var formIndex = 0;
     var where = { field: 'Create', order: 'desc', condition: '' };
     var cols = [[

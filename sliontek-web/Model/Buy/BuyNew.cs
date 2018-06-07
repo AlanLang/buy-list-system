@@ -28,7 +28,7 @@ namespace sliontek_web.Model.Buy
         [MaxLength(90)]
         public string BuyCheckPerson { get; set; }
 
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [MaxLength(20)]
         public string BuyTime { get; set; }
 
         /// <summary>
