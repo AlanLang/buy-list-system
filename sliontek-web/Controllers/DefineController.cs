@@ -9,7 +9,8 @@ namespace sliontek_web.Controllers
 {
     public class DefineController : SlionControllercs
     {
-        // GET: Define
+        #region 购物类型
+
         public ActionResult BuyType()
         {
             return View();
@@ -47,5 +48,8 @@ namespace sliontek_web.Controllers
                 return SuccessResult("新增成功");
             }
         }
+        #endregion
+
+
     }
 }
