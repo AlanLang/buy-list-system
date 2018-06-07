@@ -271,6 +271,8 @@
     <Content Include="Scripts\mCustomScrollbar\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="Scripts\mCustomScrollbar\jquery.mCustomScrollbar.min.css" />
     <Content Include="Scripts\preload.js" />
+    <Content Include="Scripts\selectPage\selectpage.css" />
+    <Content Include="Scripts\selectPage\selectpage.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
