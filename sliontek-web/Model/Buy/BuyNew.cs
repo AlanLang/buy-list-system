@@ -32,7 +32,7 @@ namespace sliontek_web.Model.Buy
         public string BuyTime { get; set; }
 
         /// <summary>
-        /// 0 新增，1审核中，2 被驳货，3已通过，4归档
+        /// 0 新增，1审核中，2 被驳货，3已通过，4不买了，5已购买
         /// </summary>
         public int BuyState { get; set; }
 

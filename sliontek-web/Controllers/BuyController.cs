@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace sliontek_web.Controllers
 {
-    public class BuyController : Controller
+    public class BuyController : SlionControllercs
     {
         // GET: Buy
         public ActionResult BuyNew()
@@ -21,6 +21,16 @@ namespace sliontek_web.Controllers
                 ViewData["buyLevels"] = new SelectList(buyLevels.AsEnumerable(), "BuyLevel", "BuyLevel");
             }
             return View();
+        }
+
+        public ActionResult GetPersons()
+        {
+            using (EFContext db = new EFContext())
+            {
+                db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
+                var persons = db.SysUser.Where(m => m.UserName != "alan").ToList();
+                return SuccessResult(persons);
+            }
         }
     }
 }
