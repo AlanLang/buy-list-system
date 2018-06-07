@@ -43,6 +43,18 @@ namespace sliontek_web
             return MvcHtmlString.Create(html);
         }
 
+        public static MvcHtmlString SelectStart(string title)
+        {
+            string html = "<div class='layui-form-item'><label class='layui-form-label'>{0}</label><div class='layui-input-block'></div></div>";
+            html = string.Format(html, title);
+            return MvcHtmlString.Create(html);
+        }
+        public static MvcHtmlString SelectEnd()
+        {
+            string html = "</div></div>";
+            return MvcHtmlString.Create(html);
+        }
+
         public static MvcHtmlString Password(string name, string titie, string value, string verify)
         {
             string html = "<div class='layui-form-item password'><label class='layui-form-label'>{1}</label><div class='layui-input-block'><input type = 'password' id = '{0}' name='{0}' lay-verify='{3}' placeholder='请输入{1}' value='{2}' autocomplete='off' class='layui-input'></div></div>";
