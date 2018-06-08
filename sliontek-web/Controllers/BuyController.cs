@@ -33,5 +33,26 @@ namespace sliontek_web.Controllers
                 return SuccessResult(persons);
             }
         }
+
+        public ActionResult PageBuyNew() {
+            using (EFContext db = new EFContext())
+            {
+                db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
+                var re = db.BuyNew.SearchPage(Request.Form, out PageCount).ToList();
+                return PageResult(re, PageCount);
+            }
+        }
+        public ActionResult EditBuyNew(Model.Buy.BuyNew model)
+        {
+            model.BuyState = 0;
+            model.Create = DateTime.Now;
+            model.Modified = DateTime.Now;
+            using (EFContext db = new EFContext())
+            {
+                db.BuyNew.Add(model);
+                db.SaveChanges();
+            }
+            return SuccessResult("添加成功");
+        }
     }
 }
