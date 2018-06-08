@@ -347,6 +347,14 @@
     <Compile Include="Migrations\201806070903520_add-buy-new-log2.Designer.cs">
       <DependentUpon>201806070903520_add-buy-new-log2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806080156552_add-buy-new-log3.cs" />
+    <Compile Include="Migrations\201806080156552_add-buy-new-log3.Designer.cs">
+      <DependentUpon>201806080156552_add-buy-new-log3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806080318047_add-buy-new-log4.cs" />
+    <Compile Include="Migrations\201806080318047_add-buy-new-log4.Designer.cs">
+      <DependentUpon>201806080318047_add-buy-new-log4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Buy\BuyNew.cs" />
     <Compile Include="Model\Buy\BuyNewChangeLog.cs" />
@@ -474,6 +482,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806070903520_add-buy-new-log2.resx">
       <DependentUpon>201806070903520_add-buy-new-log2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806080156552_add-buy-new-log3.resx">
+      <DependentUpon>201806080156552_add-buy-new-log3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806080318047_add-buy-new-log4.resx">
+      <DependentUpon>201806080318047_add-buy-new-log4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

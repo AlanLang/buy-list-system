@@ -28,7 +28,8 @@ namespace sliontek_web.Controllers
             using (EFContext db = new EFContext())
             {
                 db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
-                var persons = db.SysUser.Where(m => m.UserName != "alan").ToList();
+                string userCode = new cuser().usercode;
+                var persons = db.SysUser.Where(m => m.UserCode != "alan" && m.UserCode != userCode).ToList();
                 return SuccessResult(persons);
             }
         }

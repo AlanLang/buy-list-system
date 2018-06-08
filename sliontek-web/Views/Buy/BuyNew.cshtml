@@ -12,15 +12,17 @@
     .layui-form-select {
         width:332px;
     }
+    .sp_container_combo {
+        width:779px !important;
+        height:38px !important;
+    }
 </style>
-<script src="~/Scripts/selectPage/selectpage.min.js"></script>
 
 @HtmlHelp.SearchFormStart()
 @HtmlHelp.SearchInput("查询", "search", "查询购物商品")
 @HtmlHelp.SearchButton("searchbtn", "reset")
 @HtmlHelp.SearchFormEnd()
 @HtmlHelp.Table("购物申请")
-
 
 @HtmlHelp.LayFormStart("form-role-edit")
 @HtmlHelp.Hidden("ID", "")
@@ -36,11 +38,11 @@
     <div class="input-inline">
         <label class="layui-form-label">所属类别</label>
         <div class="layui-input-inline">
-            @Html.DropDownList("TypeName", (SelectList)ViewData["buyTypes"], "请选择")
+            @Html.DropDownList("BuyTypeName", (SelectList)ViewData["buyTypes"], "请选择")
         </div>
     </div>
     <div class="input-inline">
-        @HtmlHelp.Input("TypeName", "购买地址", "", "required")
+        @HtmlHelp.Input("BuyUrl", "购买地址", "", "required")
     </div>
 </div>
 <div>
@@ -54,11 +56,11 @@
         @HtmlHelp.Input("BuyTime", "购买时间", "", "required")
     </div>
 </div>
-@HtmlHelp.Input("TypeName", "审批人", "", "required")
-@HtmlHelp.Textarea("TypeDesc", "购买理由", "", "", "150")
+@HtmlHelp.Input("BuyCheckPerson", "审批人", "", "required")
+@HtmlHelp.Textarea("BuyDesc", "购买理由", "", "", "150")
 @HtmlHelp.FormBtn()
 @HtmlHelp.LayFormEnd()
-
+<script src="~/Scripts/selectPage/selectpage.min.js"></script>
 <script>
     layui.use(['sliontable', 'common', 'form', 'laydate'], function () {
     let laydate = layui.laydate;
@@ -132,5 +134,21 @@
         }
         return false;
     });
+
+    $(function () {
+        $.getJSON("/Buy/GetPersons", function (re) {
+            if (re.code == 0) {
+                let tag_data = re.data;
+                $('#BuyCheckPerson').selectPage({
+                    showField: 'UserName',
+                    keyField: 'UserName',
+                    selectOnly: true,
+                    multiple : true,
+                    data: tag_data
+                });
+            }
+        })
+    })
+
 });
 </script>
