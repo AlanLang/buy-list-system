@@ -436,6 +436,7 @@
     <Content Include="Views\Buy\BuyNew.cshtml" />
     <Content Include="Views\Buy\BuyCheck.cshtml" />
     <Content Include="Views\Buy\BuyCheckLog.cshtml" />
+    <None Include="Properties\PublishProfiles\buyListServer.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
