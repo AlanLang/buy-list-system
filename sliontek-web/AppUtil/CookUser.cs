@@ -10,7 +10,7 @@ namespace sliontek_web
 {
     public class CookUser
     {
-        private string cookname = "SliontekWeb";
+        private string cookname = "BuyListSystem";
         private HttpSessionState Session = HttpContext.Current.Session;
 
         private string _usercode;
@@ -91,6 +91,7 @@ namespace sliontek_web
 
     public class cuser
     {
+        private string cookname = "BuyListSystem";
         private string _usercode;
         private string _username;
         public string usercode { get { return _usercode; } }
@@ -98,7 +99,7 @@ namespace sliontek_web
 
         public cuser()
         {
-            HttpCookie cook = HttpContext.Current.Request.Cookies["SliontekWeb"];
+            HttpCookie cook = HttpContext.Current.Request.Cookies[cookname];
             if (cook != null)
             {
                 if (!string.IsNullOrEmpty(cook.Values["usercode"]))

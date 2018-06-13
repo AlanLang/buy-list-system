@@ -156,6 +156,7 @@
     });
     $("#addOne").on("click", function () {
         $('#form-edit').children("form").trigger("reset")
+        $("#ID").val("");
         formIndex = common.open('购物申请', '#form-edit')
     });
     $("#btnclose").on("click", function () {

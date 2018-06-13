@@ -37,8 +37,9 @@ namespace sliontek_web.Controllers
         public ActionResult PageBuyNew() {
             using (EFContext db = new EFContext())
             {
+                var username = new cuser().username;
                 db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
-                var re = db.BuyNew.Where(m=>m.BuyState < 4).SearchPage(Request.Form, out PageCount).ToList();
+                var re = db.BuyNew.Where(m=>m.BuyState < 4 && m.BuyAuthor.Equals(username)).SearchPage(Request.Form, out PageCount).ToList();
                 return PageResult(re, PageCount);
             }
         }
@@ -124,7 +125,8 @@ namespace sliontek_web.Controllers
             using (EFContext db = new EFContext())
             {
                 db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
-                var re = db.BuyNew.Where(m => m.BuyState == 1).SearchPage(Request.Form, out PageCount).ToList();
+                var username = new cuser().username;
+                var re = db.BuyNew.Where(m => m.BuyState == 1 && m.BuyCheckPerson.Contains(username)).SearchPage(Request.Form, out PageCount).ToList();
                 return PageResult(re, PageCount);
             }
         }
