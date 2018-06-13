@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "BuyCheckLog";
+    Layout = "~/Views/Master/_layer.cshtml";
+}
+<div style="height:900px">
+    <table id='sliontable' lay-filter='sliontable'></table>
+</div>
+
+<script>
+    let id = @ViewBag.id
+    layui.use(['sliontable', 'common', 'form', 'laydate'], function () {
+    let laydate = layui.laydate;
+    var table = layui.sliontable;
+    var common = layui.common;
+    var form = layui.form;
+    var formIndex = 0;
+    var where = { field: 'BuyTime', order: 'asc', condition: '' };
+    var cols = [[
+       { field: 'LogStatus', title: '状态', toolbar: '#BuyCheckStatus' }
+      , { field: 'Person', title: '提交人', }
+      , { field: 'LogMsg', title: '留言', }
+      , { title: '提交时间', templet: "<div>{{formatDateTime(d.Create)}}</div>" }
+    ]]
+    // 实例化table
+    var mestable = table.render({
+        url: '/Buy/PageCheckLog?id='+id //数据接口
+        , cols: cols
+        , where: where
+        , height:"900px"
+    });
+});
+</script>
+<script type="text/html" id="BuyCheckStatus">
+    {{#  if(d.LogStatus == 0){ }}
+    <span style="color:red">拒绝</span>
+    {{#  }else { }}
+    <span style="color:green">同意</span>
+    {{#  } }}
+</script>

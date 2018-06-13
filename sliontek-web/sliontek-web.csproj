@@ -355,6 +355,10 @@
     <Compile Include="Migrations\201806080318047_add-buy-new-log4.Designer.cs">
       <DependentUpon>201806080318047_add-buy-new-log4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806130602241_buycheck01.cs" />
+    <Compile Include="Migrations\201806130602241_buycheck01.Designer.cs">
+      <DependentUpon>201806130602241_buycheck01.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Buy\BuyNew.cs" />
     <Compile Include="Model\Buy\BuyNewChangeLog.cs" />
@@ -430,6 +434,8 @@
     <Content Include="Views\Home\ChangUserPass.cshtml" />
     <Content Include="Views\Define\BuyType.cshtml" />
     <Content Include="Views\Buy\BuyNew.cshtml" />
+    <Content Include="Views\Buy\BuyCheck.cshtml" />
+    <Content Include="Views\Buy\BuyCheckLog.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -488,6 +494,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806080318047_add-buy-new-log4.resx">
       <DependentUpon>201806080318047_add-buy-new-log4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806130602241_buycheck01.resx">
+      <DependentUpon>201806130602241_buycheck01.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

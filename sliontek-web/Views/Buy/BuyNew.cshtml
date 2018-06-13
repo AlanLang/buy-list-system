@@ -134,7 +134,7 @@
             })
         }
         if (layEvent === 'bar-state') {//查看详细状态
-
+            common.iframe('审核日志', '/Buy/BuyCheckLog?id=' + data.ID);
         }
         if (layEvent === 'bar-edit') {
             $.getJSON("/Buy/GetBuyNew?id=" + data.ID, function (re) {
@@ -200,13 +200,13 @@
 </script>
 <script type="text/html" id="BuyState">
     {{#  if(d.BuyState == 0){ }}
-    <span style="color:cadetblue">待提交</span>
+    <span title="点击显示详细状态" style="color:cadetblue">待提交</span>
     {{#  }else if(d.BuyState == 1){ }}
-    <span lay-event="bar-state" style="color:blue">待审核</span>
+    <span title="点击显示详细状态" lay-event="bar-state" style="color:blue">待审核</span>
     {{#  }else if(d.BuyState == 2){ }}
-    <span lay-event="bar-state" style="color:red">被驳回</span>
+    <span title="点击显示详细状态" lay-event="bar-state" style="color:red">被驳回</span>
     {{#  }else if(d.BuyState == 3){ }}
-    <span lay-event="bar-state" style="color:green">已通过</span>
+    <span title="点击显示详细状态" lay-event="bar-state" style="color:green">已通过</span>
     {{#  } }}
 </script>
 <script type="text/html" id="BuyEdit">

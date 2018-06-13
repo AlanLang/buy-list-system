@@ -9,7 +9,7 @@ namespace sliontek_web.Controllers
 {
     public class BuyController : SlionControllercs
     {
-        // GET: Buy
+        #region 购物申请
         public ActionResult BuyNew()
         {
             using (EFContext db = new EFContext())
@@ -110,6 +110,65 @@ namespace sliontek_web.Controllers
                 var buyNew = db.BuyNew.Where(m => m.ID == id).FirstOrDefault();
                 buyNew.BuyState = status;
                 db.SaveChanges();
+            }
+        }
+        #endregion
+
+        #region 购物审核
+        public ActionResult BuyCheck()
+        {
+            return View();
+        }
+        public ActionResult PageBuyCheck()
+        {
+            using (EFContext db = new EFContext())
+            {
+                db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
+                var re = db.BuyNew.Where(m => m.BuyState == 1).SearchPage(Request.Form, out PageCount).ToList();
+                return PageResult(re, PageCount);
+            }
+        }
+        public ActionResult BuyCheckCommit(int id, int type,string log)
+        {
+            string person = new cuser().username;
+            using (EFContext db = new EFContext())
+            {
+                Model.Buy.BuyNewChangeLog cLog = new Model.Buy.BuyNewChangeLog()
+                {
+                    BuyNewID = id,
+                    LogStatus = type,
+                    Create = DateTime.Now,
+                    LogMsg = log,
+                    Person = person
+
+                };
+                db.BuyNewChangeLog.Add(cLog);
+                var buy = db.BuyNew.Where(m => m.ID == id).FirstOrDefault();
+                if (type == 1)
+                {
+                    buy.BuyState = 3;
+                }
+                else {
+                    buy.BuyState = 2;
+                }
+                db.SaveChanges();
+            }
+            return SuccessResult("提交成功");
+        }
+
+        #endregion
+        
+        public ActionResult BuyCheckLog(int id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
+        public ActionResult PageCheckLog(int id)
+        {
+            using (EFContext db = new EFContext())
+            {
+                var log = db.BuyNewChangeLog.Where(m => m.BuyNewID == id).OrderByDescending(m=>m.Create).ToList();
+                return SuccessResult(log);
             }
         }
     }

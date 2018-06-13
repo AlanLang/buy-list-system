@@ -15,6 +15,10 @@ namespace sliontek_web.Model.Buy
 
         [MaxLength(50)]
         public string LogMsg { get; set; }
+        /// <summary>
+        /// 0不同意，1同意
+        /// </summary>
+        public int LogStatus { get; set; }
         [MaxLength(30)]
         public string Person { get; set; }
         [JsonConverter(typeof(UnixDateTimeConverter))]

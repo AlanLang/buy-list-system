@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "BuyCheck";
+    Layout = "~/Views/Master/_page.cshtml";
+}
+<style>
+.input-inline {
+        width:443px;
+        display:inline-block;
+    }
+</style>
+@HtmlHelp.SearchFormStart()
+@HtmlHelp.SearchInput("查询", "search", "查询购物商品")
+@HtmlHelp.SearchButton("searchbtn", "reset")
+@HtmlHelp.SearchFormEnd()
+@HtmlHelp.Table("购物审核")
+
+@HtmlHelp.LayFormStart("form-edit")
+@HtmlHelp.Hidden("ID", "")
+<div>
+    <div class="input-inline">
+        @HtmlHelp.Input("BuyName", "物品名称", "", "")
+    </div>
+    <div class="input-inline">
+        @HtmlHelp.Input("BuyPrice", "物品价格", "", "")
+    </div>
+</div>
+<div>
+    <div class="input-inline">
+        @HtmlHelp.Input("BuyTypeName", "所属类别", "", "")
+    </div>
+    <div class="input-inline">
+        @HtmlHelp.Input("BuyUrl", "购买地址", "", "")
+    </div>
+</div>
+<div>
+    <div class="input-inline">
+        @HtmlHelp.Input("BuyLevel", "重要程度", "", "")
+    </div>
+    <div class="input-inline">
+        @HtmlHelp.Input("BuyTime", "购买时间", "", "")
+    </div>
+</div>
+@HtmlHelp.Textarea("BuyDesc", "购买理由", "", "", "50")
+@HtmlHelp.Textarea("BuyCheckMsg", "留言", "", "", "50")
+<div style='text-align: right;margin-bottom: 10px;' class='layui-form-item'>
+    <div class='layui-input-block'>
+        <button id="check-agree" type="button" class='layui-btn'>同意</button>
+        <button id="check-disagree" type="button" class='layui-btn layui-btn-danger'>拒绝</button>
+    </div>
+</div>
+@HtmlHelp.LayFormEnd()
+
+
+<script>
+    layui.use(['sliontable', 'common', 'form', 'laydate'], function () {
+    let laydate = layui.laydate;
+    var table = layui.sliontable;
+    var common = layui.common;
+    var form = layui.form;
+    laydate.render({ elem: '#BuyTime', type: 'date', format: 'yyyy-MM-dd', min: 0 });
+    var formIndex = 0;
+    var where = { field: 'BuyTime', order: 'asc', condition: '' };
+    var cols = [[
+       { field: 'BuyName', title: '物品名称', }
+      , { field: 'BuyPrice', title: '价格', }
+      , { field: 'BuyTypeName', title: '所属类别', }
+      , { field: 'BuyLevel', title: '重要程度', }
+      , { field: 'BuyTime', title: '购买时间', }
+      , { field: 'BuyAuthor', title: '申请人', }
+      , { title: '查看', toolbar: '#BuyCheckView', width: 60 }
+    ]]
+    // 实例化table
+    var mestable = table.render({
+        url: '/Buy/PageBuyCheck' //数据接口
+        , cols: cols
+        , where: where
+    });
+    // 监听内容点击
+    table.tool(function (obj) {
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+        if (layEvent === 'bar-check-view') {
+            $.getJSON("/Buy/GetBuyNew?id=" + data.ID, function (re) {
+                $('#form-edit').children("form").autofill(re.data);
+                form.render(); //更新全部
+                formIndex = common.open('购物申请明细', '#form-edit')
+            })
+        }
+    });
+    //监听按钮点击
+    $("#searchbtn").on("click", function () {
+        where.condition = JSON.stringify([{ op: "like", name: "TypeName", value: $("#search").val(), type: "text", field: "and" }]);
+        table.search(where, $(this));
+    });
+    $("#reset").on("click", function () {
+        where.condition = "";
+        table.search(where);
+    });
+
+    $(function () {
+        $("#check-agree").on("click", function () {
+            let id = $("#ID").val();
+            let log = $("#BuyCheckMsg").val();
+            let index = common.deleteConfirm('确认同意购买吗？', function () {
+                $.getJSON("/Buy/BuyCheckCommit?type=1&id=" + id + "&log=" + log, function (re) {
+                    if (re.code == 0) {
+                        common.msg("提交成功");
+                        mestable.reload();
+                        layer.closeAll();
+                    } else {
+                        common.msgError(re.err);
+                    }
+                })
+            })
+        })
+        $("#check-disagree").on("click", function () {
+            let id = $("#ID").val();
+            let log = $("#BuyCheckMsg").val();
+            let index = common.deleteConfirm('确认拒绝请求吗？', function () {
+                $.getJSON("/Buy/BuyCheckCommit?type=0&id=" + id + "&log="+log, function (re) {
+                    if (re.code == 0) {
+                        common.msg("提交成功");
+                        mestable.reload();
+                        layer.closeAll();
+                    } else {
+                        common.msgError(re.err);
+                    }
+                })
+            })
+        })
+    })
+
+});
+</script>
+
+<script type="text/html" id="BuyCheckView">
+    <i class="layui-icon" lay-event="bar-check-view" title="查看" style="font-size: 25px;color: #177bbb;">&#xe63c;</i>
+</script>
