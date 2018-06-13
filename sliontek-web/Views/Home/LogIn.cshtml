@@ -62,7 +62,7 @@
                     } else {
                         $that.val(loginText+".");
                     }
-                }, 1000);
+                }, 100000);
                 var User = $("#loginForm").serialize();
 
                 $.getJSON("/Home/LoginUser", User, function (re) {

@@ -29,7 +29,7 @@ namespace sliontek_web.Controllers
             {
                 db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
                 string userCode = new cuser().usercode;
-                var persons = db.SysUser.Where(m => m.UserCode != "alan" && m.UserCode != userCode).ToList();
+                var persons = db.SysUser.Where(m => !m.UserCode.Equals("admin") && !m.UserCode.Equals("alan") && !m.UserCode.Equals(userCode)).ToList();
                 return SuccessResult(persons);
             }
         }
@@ -38,21 +38,79 @@ namespace sliontek_web.Controllers
             using (EFContext db = new EFContext())
             {
                 db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
-                var re = db.BuyNew.SearchPage(Request.Form, out PageCount).ToList();
+                var re = db.BuyNew.Where(m=>m.BuyState < 4).SearchPage(Request.Form, out PageCount).ToList();
                 return PageResult(re, PageCount);
             }
         }
         public ActionResult EditBuyNew(Model.Buy.BuyNew model)
         {
-            model.BuyState = 0;
-            model.Create = DateTime.Now;
-            model.Modified = DateTime.Now;
+            if (string.IsNullOrEmpty( model.BuyCheckPerson))
+            {
+                return FailResult(1, "审批人不能为空");
+            }
+            if (model.ID > 0)
+            {
+                using (EFContext db = new EFContext())
+                {
+                    var buyNew = db.BuyNew.Where(m => m.ID == model.ID).FirstOrDefault();
+                    buyNew.BuyName = model.BuyName;
+                    buyNew.BuyPrice = model.BuyPrice;
+                    buyNew.BuyUrl = model.BuyUrl;
+                    buyNew.BuyTypeName = model.BuyTypeName;
+                    buyNew.BuyLevel = model.BuyLevel;
+                    buyNew.BuyCheckPerson = model.BuyCheckPerson;
+                    buyNew.BuyTime = model.BuyTime;
+                    buyNew.BuyDesc = model.BuyDesc;
+                    buyNew.Modified = DateTime.Now;
+                    db.SaveChanges();
+                    return SuccessResult("修改成功");
+                }
+            }
+            else {
+                model.BuyState = 0;
+                model.Create = DateTime.Now;
+                model.Modified = DateTime.Now;
+                model.BuyAuthor = new cuser().username;
+                using (EFContext db = new EFContext())
+                {
+                    db.BuyNew.Add(model);
+                    db.SaveChanges();
+                }
+                return SuccessResult("添加成功");
+            }
+
+        }
+        public ActionResult BuyNewCommit(int id)
+        {
+            BuyNewUpdateStatus(id, 1);
+            return SuccessResult("已提交审核");
+        }
+        public ActionResult BuyGiveUp(int id)
+        {
+            BuyNewUpdateStatus(id, 4);
+            return SuccessResult("成功放弃购买");
+        }
+        public ActionResult BuyArchive(int id)
+        {
+            BuyNewUpdateStatus(id, 5);
+            return SuccessResult("成功归档");
+        }
+        public ActionResult GetBuyNew(int id)
+        {
             using (EFContext db = new EFContext())
             {
-                db.BuyNew.Add(model);
+                var buyNew = db.BuyNew.Where(m => m.ID == id).FirstOrDefault();
+                return SuccessResult(buyNew);
+            }
+        }
+        protected void BuyNewUpdateStatus(int id, int status)
+        {
+            using (EFContext db = new EFContext())
+            {
+                var buyNew = db.BuyNew.Where(m => m.ID == id).FirstOrDefault();
+                buyNew.BuyState = status;
                 db.SaveChanges();
             }
-            return SuccessResult("添加成功");
         }
     }
 }

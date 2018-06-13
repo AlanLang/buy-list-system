@@ -24,7 +24,7 @@
 @HtmlHelp.SearchFormEnd()
 @HtmlHelp.Table("购物申请")
 
-@HtmlHelp.LayFormStart("form-role-edit")
+@HtmlHelp.LayFormStart("form-edit")
 @HtmlHelp.Hidden("ID", "")
 <div>
     <div class="input-inline">
@@ -56,7 +56,7 @@
         @HtmlHelp.Input("BuyTime", "购买时间", "", "required")
     </div>
 </div>
-@HtmlHelp.Input("BuyCheckPerson", "审批人", "", "required")
+@HtmlHelp.Input("BuyCheckPerson", "审批人", "", "")
 @HtmlHelp.Textarea("BuyDesc", "购买理由", "", "", "150")
 @HtmlHelp.FormBtn()
 @HtmlHelp.LayFormEnd()
@@ -74,8 +74,14 @@
        { field: 'BuyName', title: '物品名称', }
       , { field: 'BuyPrice', title: '价格', }
       , { field: 'BuyTypeName', title: '所属类别', }
-      , { field: 'BuyLevel', title: '重要成都', }
-      , { title: '购买时间', templet: "<div>{{formatDateTime(d.BuyTime)}}</div>" }
+      , { field: 'BuyLevel', title: '重要程度', }
+      , { field: 'BuyTime', title: '购买时间', }
+      , { field: 'BuyCheckPerson', title: '审批人', }
+      , { field: 'BuyState', title: '当前状态', toolbar: '#BuyState' }
+      , { title: '编辑', toolbar: '#BuyEdit',width:60 }
+      , { title: '提交', toolbar: '#BuyCommit', width: 60 }
+      , { title: '放弃', toolbar: '#BuyGiveup', width: 60 }
+      , { title: '归档', toolbar: '#BuyArchive', width: 60 }
     ]]
     // 实例化table
     var mestable = table.render({
@@ -88,17 +94,54 @@
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的DOM对象
-        if (layEvent === 'bar-delete') { //删除
-            var index = common.deleteConfirm('是否删除类别【' + data.TypeName + '】', function () {
-                $.getJSON("/Define/DeleteBuyType?id=" + data.ID, function (re) {
+        if (layEvent === 'bar-commit') { //提交
+            var index = common.deleteConfirm('确认无误并提交审核？', function () {
+                $.getJSON("/Buy/BuyNewCommit?id=" + data.ID, function (re) {
                     if (re.code == 0) {
-                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                         layer.close(index);
-                        common.msg("成功删除类别【" + data.TypeName + "】");
+                        common.msg("成功提交审核");
+                        mestable.reload();
                     } else {
                         common.msgError(re.err);
                     }
                 })
+            })
+        }
+        if (layEvent === 'bar-giveup') { //放弃
+            var index = common.deleteConfirm('确认要放弃购买吗？', function () {
+                $.getJSON("/Buy/BuyGiveUp?id=" + data.ID, function (re) {
+                    if (re.code == 0) {
+                        layer.close(index);
+                        common.msg("成功放弃购买");
+                        mestable.reload();
+                    } else {
+                        common.msgError(re.err);
+                    }
+                })
+            })
+        }
+        if (layEvent === 'bar-archive') { //归档
+            var index = common.deleteConfirm('确认要归档吗？', function () {
+                $.getJSON("/Buy/BuyArchive?id=" + data.ID, function (re) {
+                    if (re.code == 0) {
+                        layer.close(index);
+                        common.msg("成功归档");
+                        mestable.reload();
+                    } else {
+                        common.msgError(re.err);
+                    }
+                })
+            })
+        }
+        if (layEvent === 'bar-state') {//查看详细状态
+
+        }
+        if (layEvent === 'bar-edit') {
+            $.getJSON("/Buy/GetBuyNew?id=" + data.ID, function (re) {
+                $('#form-edit').children("form").autofill(re.data);
+                form.render(); //更新全部
+                $('#BuyCheckPerson').selectPageRefresh();
+                formIndex = common.open('修改', '#form-edit')
             })
         }
     });
@@ -112,8 +155,8 @@
         table.search(where);
     });
     $("#addOne").on("click", function () {
-        $('#form-role-edit').children("form").trigger("reset")
-        formIndex = common.open('购物申请', '#form-role-edit')
+        $('#form-edit').children("form").trigger("reset")
+        formIndex = common.open('购物申请', '#form-edit')
     });
     $("#btnclose").on("click", function () {
         $(".submitbtn").html("提交");
@@ -126,7 +169,7 @@
                 $(".submitbtn").html("提交");
                 if (data.code == 0) {
                     common.msg(data.msg, function () {
-                        $('#form-role-edit').children("form").trigger("reset")
+                        $('#form-edit').children("form").trigger("reset")
                         mestable.reload();
                         layer.close(formIndex);
                     })
@@ -154,4 +197,59 @@
     })
 
 });
+</script>
+<script type="text/html" id="BuyState">
+    {{#  if(d.BuyState == 0){ }}
+    <span style="color:cadetblue">待提交</span>
+    {{#  }else if(d.BuyState == 1){ }}
+    <span lay-event="bar-state" style="color:blue">待审核</span>
+    {{#  }else if(d.BuyState == 2){ }}
+    <span lay-event="bar-state" style="color:red">被驳回</span>
+    {{#  }else if(d.BuyState == 3){ }}
+    <span lay-event="bar-state" style="color:green">已通过</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="BuyEdit">
+    {{#  if(d.BuyState == 0){ }}
+    <i class="layui-icon" title="编辑" lay-event="bar-edit" style="font-size: 25px; color: #177bbb;">&#xe642;</i>
+    {{#  }else if(d.BuyState == 1){ }}
+    <i class="layui-icon" title="编辑" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe642;</i>
+    {{#  }else if(d.BuyState == 2){ }}
+    <i class="layui-icon" title="编辑" lay-event="bar-edit" style="font-size: 25px; color: #177bbb;">&#xe642;</i>
+    {{#  }else if(d.BuyState == 3){ }}
+    <i class="layui-icon" title="编辑" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe642;</i>
+    {{#  } }}
+</script>
+<script type="text/html" id="BuyCommit">
+    {{#  if(d.BuyState == 0){ }}
+    <i class="layui-icon" title="提交" lay-event="bar-commit" style="font-size: 25px; color: #177bbb;">&#xe605;</i>
+    {{#  }else if(d.BuyState == 1){ }}
+    <i class="layui-icon" title="提交" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe605;</i>
+    {{#  }else if(d.BuyState == 2){ }}
+    <i class="layui-icon" title="提交" lay-event="bar-commit" style="font-size: 25px; color: #177bbb;">&#xe605;</i>
+    {{#  }else if(d.BuyState == 3){ }}
+    <i class="layui-icon" title="提交" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe605;</i>
+    {{#  } }}
+</script>
+<script type="text/html" id="BuyGiveup">
+    {{#  if(d.BuyState == 0){ }}
+    <i class="layui-icon" title="放弃" lay-event="bar-giveup" style="font-size: 25px; color: #ff5722;">&#xe640;</i>
+    {{#  }else if(d.BuyState == 1){ }}
+    <i class="layui-icon" title="放弃" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe640;</i>
+    {{#  }else if(d.BuyState == 2){ }}
+    <i class="layui-icon" title="放弃" lay-event="bar-giveup" style="font-size: 25px; color: #ff5722;">&#xe640;</i>
+    {{#  }else if(d.BuyState == 3){ }}
+    <i class="layui-icon" title="放弃" lay-event="bar-giveup" style="font-size: 25px; color: #ff5722;">&#xe640;</i>
+    {{#  } }}
+</script>
+<script type="text/html" id="BuyArchive">
+    {{#  if(d.BuyState == 0){ }}
+    <i class="layui-icon" title="归档" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe657;</i>
+    {{#  }else if(d.BuyState == 1){ }}
+    <i class="layui-icon" title="归档" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe657;</i>
+    {{#  }else if(d.BuyState == 2){ }}
+    <i class="layui-icon" title="归档" style="font-size: 25px; color: #c9c9c9;cursor:no-drop;">&#xe657;</i>
+    {{#  }else if(d.BuyState == 3){ }}
+    <i class="layui-icon" title="归档" lay-event="bar-archive" style="font-size: 25px; color: #ac22ff;">&#xe657;</i>
+    {{#  } }}
 </script>
