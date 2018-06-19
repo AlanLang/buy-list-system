@@ -19,6 +19,8 @@ namespace sliontek_web.Model
         public string UserPwd { get; set; }
         [MaxLength(35)]
         public string UserMail { get; set; }
+        [MaxLength(35)]
+        public string UserWx { get; set; }
 
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime UserModified { get; set; }

@@ -141,7 +141,8 @@ namespace sliontek_web.Controllers
                     LogStatus = type,
                     Create = DateTime.Now,
                     LogMsg = log,
-                    Person = person
+                    Person = person,
+                    ChangeFrom = "网页"
 
                 };
                 db.BuyNewChangeLog.Add(cLog);

@@ -21,6 +21,8 @@ namespace sliontek_web.Model.Buy
         public int LogStatus { get; set; }
         [MaxLength(30)]
         public string Person { get; set; }
+        [MaxLength(30)]
+        public string ChangeFrom{get;set;}
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime Create { get; set; }
     }

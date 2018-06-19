@@ -359,6 +359,14 @@
     <Compile Include="Migrations\201806130602241_buycheck01.Designer.cs">
       <DependentUpon>201806130602241_buycheck01.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806190606256_adduserwx.cs" />
+    <Compile Include="Migrations\201806190606256_adduserwx.Designer.cs">
+      <DependentUpon>201806190606256_adduserwx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806190844280_adduserwx1.cs" />
+    <Compile Include="Migrations\201806190844280_adduserwx1.Designer.cs">
+      <DependentUpon>201806190844280_adduserwx1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Buy\BuyNew.cs" />
     <Compile Include="Model\Buy\BuyNewChangeLog.cs" />
@@ -498,6 +506,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806130602241_buycheck01.resx">
       <DependentUpon>201806130602241_buycheck01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806190606256_adduserwx.resx">
+      <DependentUpon>201806190606256_adduserwx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806190844280_adduserwx1.resx">
+      <DependentUpon>201806190844280_adduserwx1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
