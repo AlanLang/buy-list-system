@@ -12,6 +12,7 @@ namespace sliontek_web.Controllers
     [MemberCheck]
     public class ApiController : SlionControllercs
     {
+        #region 获取待审批的列表
         public ActionResult GetBuyList(string user)
         {
             using (EFContext db = new EFContext())
@@ -20,7 +21,7 @@ namespace sliontek_web.Controllers
                 if (us == null || string.IsNullOrEmpty(us.UserCode))
                 {
                     LoggerHelper.Info($"无法识别的用户{user}");
-                    return FailResult(1,$"无法识别的用户名{user}");
+                    return FailResult(1, $"无法识别的用户名{user}");
                 }
                 LoggerHelper.Info($"api-用户{user}获取列表");
                 db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
@@ -33,6 +34,9 @@ namespace sliontek_web.Controllers
             }
         }
 
+        #endregion
+
+        #region 提交购物审批
         public ActionResult BuyCommit(Model.Buy.BuyNew buy)
         {
             if (string.IsNullOrEmpty(buy.BuyName))
@@ -47,6 +51,18 @@ namespace sliontek_web.Controllers
             {
                 return FailResult(1, "审核人不能为空");
             }
+            if (string.IsNullOrEmpty(buy.BuyTypeName))
+            {
+                return FailResult(1, "物品类别不能为空");
+            }
+            if (string.IsNullOrEmpty(buy.BuyLevel))
+            {
+                return FailResult(1, "物品级别不能为空");
+            }
+            if (string.IsNullOrEmpty(buy.BuyTime))
+            {
+                return FailResult(1, "购买时间不能为空");
+            }
             using (EFContext db = new EFContext())
             {
                 var checkPerson = db.SysUser.Where(m => m.UserName.Equals(buy.BuyCheckPerson)).FirstOrDefault();
@@ -60,16 +76,37 @@ namespace sliontek_web.Controllers
                     LoggerHelper.Info($"无法识别的用户{buy.BuyAuthor}");
                     return FailResult(1, $"无法识别的用户名{buy.BuyAuthor}");
                 }
-                buy.BuyState = 0;
-                buy.Create = DateTime.Now;
-                buy.Modified = DateTime.Now;
-                buy.BuyAuthor = us.UserName;
-                db.BuyNew.Add(buy);
-                db.SaveChanges();
+                if (buy.ID > 0)
+                {
+                    var buyNew = db.BuyNew.Where(m => m.ID == buy.ID).FirstOrDefault();
+                    buyNew.BuyName = buy.BuyName;
+                    buyNew.BuyPrice = buy.BuyPrice;
+                    buyNew.BuyUrl = buy.BuyUrl;
+                    buyNew.BuyTypeName = buy.BuyTypeName;
+                    buyNew.BuyLevel = buy.BuyLevel;
+                    buyNew.BuyCheckPerson = buy.BuyCheckPerson;
+                    buyNew.BuyTime = buy.BuyTime;
+                    buyNew.BuyDesc = buy.BuyDesc;
+                    buyNew.Modified = DateTime.Now;
+                    buyNew.BuyState = 1;
+                    db.SaveChanges();
+                    return SuccessResult("修改成功");
+                }
+                else {
+                    buy.BuyState = 1;
+                    buy.Create = DateTime.Now;
+                    buy.Modified = DateTime.Now;
+                    buy.BuyAuthor = us.UserName;
+                    db.BuyNew.Add(buy);
+                    db.SaveChanges();
+                }
             }
             return SuccessResult("添加成功");
         }
 
+        #endregion
+
+        #region 获取购物类型
         public ActionResult GetTypes()
         {
             using (EFContext db = new EFContext())
@@ -79,12 +116,17 @@ namespace sliontek_web.Controllers
             }
         }
 
+        #endregion
+
+        #region 获取购物级别
         public ActionResult GetLevels()
         {
             var levels = new Model.Def.DefBuyLevel().GetBuyLevels();
             return SuccessResult(levels);
         }
+        #endregion
 
+        #region 获取可以审批的人员
         public ActionResult GetPersons(string user)
         {
             using (EFContext db = new EFContext())
@@ -101,7 +143,10 @@ namespace sliontek_web.Controllers
             }
         }
 
-        public ActionResult BuyCheckCommit(int id, int type, string log,string user)
+        #endregion
+
+        #region 提交审批结果
+        public ActionResult BuyCheckCommit(int id, int type, string log, string user)
         {
             using (EFContext db = new EFContext())
             {
@@ -135,5 +180,54 @@ namespace sliontek_web.Controllers
             }
             return SuccessResult("提交成功");
         }
+
+        #endregion
+
+        #region 获取指定人员提交的购物申请
+        public ActionResult GetMyBuyList(string wxuser)
+        {
+            using (EFContext db = new EFContext())
+            {
+                var us = db.SysUser.Where(m => m.UserWx.Equals(wxuser)).FirstOrDefault();
+                if (us == null || string.IsNullOrEmpty(us.UserCode))
+                {
+                    LoggerHelper.Info($"无法识别的用户{wxuser}");
+                    return FailResult(1, $"无法识别的用户名{wxuser}");
+                }
+                var buyList = db.BuyNew.Where(m => m.BuyAuthor.Equals(us.UserName) && m.BuyState < 4).ToList();
+                return SuccessResult(buyList);
+            }
+        }
+        #endregion
+
+        #region  修改购物申请的状态
+        public ActionResult UpdateBuyListType(int id, int status)
+        {
+            using (EFContext db = new EFContext())
+            {
+                var buyItem = db.BuyNew.Where(m => m.ID == id).FirstOrDefault();
+                if (buyItem == null || string.IsNullOrEmpty(buyItem.BuyName))
+                {
+                    return FailResult(1, "无法识别的购物申请");
+                }
+                buyItem.BuyState = status;
+                buyItem.Modified = DateTime.Now;
+                db.SaveChanges();
+                return SuccessResult("修改成功");
+            }
+        }
+        #endregion
+
+        #region 获取审核日志的最后一条
+        public ActionResult GetCheckMsg(int id)
+        {
+            using (EFContext db = new EFContext())
+            {
+                var log = db.BuyNewChangeLog.Where(m => m.BuyNewID == id).OrderByDescending(m => m.ID).FirstOrDefault();
+                return SuccessResult(log);
+            }
+        }
+        #endregion
+
     }
 }

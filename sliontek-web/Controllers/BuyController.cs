@@ -63,6 +63,7 @@ namespace sliontek_web.Controllers
                     buyNew.BuyTime = model.BuyTime;
                     buyNew.BuyDesc = model.BuyDesc;
                     buyNew.Modified = DateTime.Now;
+                    buyNew.BuyState = 1;
                     db.SaveChanges();
                     return SuccessResult("修改成功");
                 }
