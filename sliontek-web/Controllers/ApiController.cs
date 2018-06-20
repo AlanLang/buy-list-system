@@ -33,7 +33,7 @@ namespace sliontek_web.Controllers
             }
         }
 
-        public ActionResult BUyCommit(Model.Buy.BuyNew buy)
+        public ActionResult BuyCommit(Model.Buy.BuyNew buy)
         {
             if (string.IsNullOrEmpty(buy.BuyName))
             {
@@ -49,6 +49,11 @@ namespace sliontek_web.Controllers
             }
             using (EFContext db = new EFContext())
             {
+                var checkPerson = db.SysUser.Where(m => m.UserName.Equals(buy.BuyCheckPerson)).FirstOrDefault();
+                if (checkPerson == null || string.IsNullOrEmpty(checkPerson.UserCode))
+                {
+                    return FailResult(1, "无法识别的审核人");
+                }
                 var us = db.SysUser.Where(m => m.UserWx.Equals(buy.BuyAuthor)).FirstOrDefault();
                 if (us == null || string.IsNullOrEmpty(us.UserCode))
                 {
