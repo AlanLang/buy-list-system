@@ -33,6 +33,38 @@ namespace sliontek_web.Controllers
             }
         }
 
+        public ActionResult BUyCommit(Model.Buy.BuyNew buy)
+        {
+            if (string.IsNullOrEmpty(buy.BuyName))
+            {
+                return FailResult(1, "名称不能为空");
+            }
+            if (buy.BuyPrice <= 0)
+            {
+                return FailResult(1, "价格必须大于0");
+            }
+            if (string.IsNullOrEmpty(buy.BuyCheckPerson))
+            {
+                return FailResult(1, "审核人不能为空");
+            }
+            using (EFContext db = new EFContext())
+            {
+                var us = db.SysUser.Where(m => m.UserWx.Equals(buy.BuyAuthor)).FirstOrDefault();
+                if (us == null || string.IsNullOrEmpty(us.UserCode))
+                {
+                    LoggerHelper.Info($"无法识别的用户{buy.BuyAuthor}");
+                    return FailResult(1, $"无法识别的用户名{buy.BuyAuthor}");
+                }
+                buy.BuyState = 0;
+                buy.Create = DateTime.Now;
+                buy.Modified = DateTime.Now;
+                buy.BuyAuthor = us.UserName;
+                db.BuyNew.Add(buy);
+                db.SaveChanges();
+            }
+            return SuccessResult("添加成功");
+        }
+
         public ActionResult BuyCheckCommit(int id, int type, string log,string user)
         {
             using (EFContext db = new EFContext())
