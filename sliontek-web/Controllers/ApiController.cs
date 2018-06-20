@@ -70,6 +70,37 @@ namespace sliontek_web.Controllers
             return SuccessResult("添加成功");
         }
 
+        public ActionResult GetTypes()
+        {
+            using (EFContext db = new EFContext())
+            {
+                var types = db.DefBuyType.ToList();
+                return SuccessResult(types);
+            }
+        }
+
+        public ActionResult GetLevels()
+        {
+            var levels = new Model.Def.DefBuyLevel().GetBuyLevels();
+            return SuccessResult(levels);
+        }
+
+        public ActionResult GetPersons(string user)
+        {
+            using (EFContext db = new EFContext())
+            {
+                db.Configuration.LazyLoadingEnabled = false;//禁用懒加载
+                var us = db.SysUser.Where(m => m.UserWx.Equals(user)).FirstOrDefault();
+                if (us == null || string.IsNullOrEmpty(us.UserCode))
+                {
+                    LoggerHelper.Info($"无法识别的用户{user}");
+                    return FailResult(1, $"无法识别的用户名{user}");
+                }
+                var persons = db.SysUser.Where(m => !m.UserCode.Equals("admin") && !m.UserCode.Equals("alan") && !m.UserCode.Equals(us.UserCode)).ToList();
+                return SuccessResult(persons);
+            }
+        }
+
         public ActionResult BuyCheckCommit(int id, int type, string log,string user)
         {
             using (EFContext db = new EFContext())
@@ -80,7 +111,7 @@ namespace sliontek_web.Controllers
                     LoggerHelper.Info($"无法识别的用户{user}");
                     return FailResult(1, $"无法识别的用户名{user}");
                 }
-                string person = us.UserCode;
+                string person = us.UserName;
                 Model.Buy.BuyNewChangeLog cLog = new Model.Buy.BuyNewChangeLog()
                 {
                     BuyNewID = id,
