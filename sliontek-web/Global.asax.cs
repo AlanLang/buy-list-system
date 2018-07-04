@@ -22,15 +22,15 @@ namespace sliontek_web
         }
         protected void Application_BeginRequest()
         {
-            #if DEBUG
-            MiniProfiler.Start();
-            #endif
+            //#if DEBUG
+            //MiniProfiler.Start();
+            //#endif
         }
         protected void Application_EndRequest()
         {
-            #if DEBUG
-            MiniProfiler.Stop();
-            #endif
+            //#if DEBUG
+            //MiniProfiler.Stop();
+            //#endif
         }
     }
 }
